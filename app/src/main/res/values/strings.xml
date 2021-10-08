@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Проверка настроек</string>
+    <string name="result">Результат</string>
+    <string name="packageText">Упаковка</string>
+    <string name="download_settings">Загрузка настроек</string>
+    <string name="clear">Сброс</string>
+</resources>

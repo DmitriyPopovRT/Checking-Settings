@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardProgram"
+        android:layout_width="1000dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black">
+
+            <TextView
+                android:id="@+id/titleCardProgram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_300"
+                android:gravity="center"
+                android:text="Программирование и функциональная проверка"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/titleRedum"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="ПО «REDUM Process»"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/workplace2.2"
+                app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceProgram"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleCardProgram" />
+
+            <TextView
+                android:id="@+id/titleWorkPlaceProgram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Номер рабочего места"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteProgram"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleRedum"
+                app:layout_constraintTop_toBottomOf="@+id/titleCardProgram" />
+
+            <TextView
+                android:id="@+id/noteProgram"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Примечание:"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/workplace2.7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleWorkPlaceProgram"
+                app:layout_constraintTop_toTopOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.2"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace2.3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleRedum"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.3"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace2.4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace2.2"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.4"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace2.5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace2.3"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.5"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace2.6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace2.4"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.6"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace2.7"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace2.5"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <TextView
+                android:id="@+id/workplace2.7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.7"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteProgram"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace2.6"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceProgram" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleMod"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:text="Модификация соответствует заказу на производство"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonClose2.2"
+                app:layout_constraintEnd_toEndOf="@+id/titleRedum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleRedum" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.2"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.2"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.2" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.2"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.2"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.2" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.3"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.3"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.3" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.3"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.3"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.3" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.4"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.4"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.4" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.4"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.4"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.4" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.5"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.5"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.5"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.5" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.5"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.5"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.5"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.5" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.6"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.6"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.6"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.6" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.6"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.6"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.6"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.6" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk2.7"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose2.7"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.7"
+                app:layout_constraintTop_toBottomOf="@+id/workplace2.7" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose2.7"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toTopOf="@+id/buttonOkVersion2.7"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.7"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk2.7" />
+
+            <EditText
+                android:id="@+id/editTextMod"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonClose2.7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteProgram"
+                app:layout_constraintTop_toBottomOf="@+id/noteProgram" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleVersion"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:text="Версия прошивки актуальна"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/titleRedum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleMod" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.2"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.2"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.2" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.2"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.2" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.3"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.3"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.3" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.3"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.3" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.4"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.4"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.4" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.4"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.4" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.5"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.5"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.5"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.5" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.5"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.5"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.5" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.6"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.6"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.6"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.6" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.6"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.6"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.6" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkVersion2.7"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseVersion2.7"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.7"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose2.7" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseVersion2.7"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/workplace2.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace2.7"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkVersion2.7" />
+
+            <EditText
+                android:id="@+id/editTextVersion"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteProgram"
+                app:layout_constraintTop_toBottomOf="@+id/editTextMod" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

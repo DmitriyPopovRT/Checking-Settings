@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/white" />
+
+    <TextView
+        android:id="@+id/titleCheckingSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonClear"
+        app:layout_constraintEnd_toStartOf="@+id/buttonClear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:text="Настройки от 06.10.2021" />
+
+    <ImageView
+        android:id="@+id/buttonClear"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_close"
+        android:text="@string/clear"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSendServer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonClear">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <fragment
+                android:id="@+id/fragmentPackage"
+                android:name="ru.popov.checkingsettings.ui.PackageFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentPackage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout="@layout/fragment_package" />
+
+            <fragment
+                android:id="@+id/fragmentProgramTest"
+                android:name="ru.popov.checkingsettings.ui.ProgramTestFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentProgramTest"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentPackage"
+                tools:layout="@layout/fragment_programm_test" />
+
+            <fragment
+                android:id="@+id/fragmentAssemblyAndLabel"
+                android:name="ru.popov.checkingsettings.ui.AssemblyAndLabelFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentAssemblyAndLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentProgramTest"
+                tools:layout="@layout/fragment_assembly_and_label" />
+
+            <fragment
+                android:id="@+id/fragmentAssembly"
+                android:name="ru.popov.checkingsettings.ui.AssemblyFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentAssembly"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentAssemblyAndLabel"
+                tools:layout="@layout/fragment_assembly" />
+
+            <fragment
+                android:id="@+id/fragmentSpeakerTest"
+                android:name="ru.popov.checkingsettings.ui.SpeakerTestFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentSpeakerTest"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentAssembly"
+                tools:layout="@layout/fragment_speaker_test" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonSendServer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:text="Отправить данные на сервер"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:icon="@drawable/ic_send"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
