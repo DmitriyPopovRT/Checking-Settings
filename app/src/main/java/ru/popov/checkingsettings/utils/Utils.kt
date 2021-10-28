@@ -1,9 +1,12 @@
 package ru.popov.checkingsettings.utils
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
+import androidx.viewbinding.ViewBinding
 import jcifs.smb1.smb1.NtlmPasswordAuthentication
 import jcifs.smb1.smb1.SmbFile
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +15,17 @@ import ru.popov.checkingsettings.R
 import java.util.*
 
 object Utils {
+
+    fun <T : ViewBinding> ViewGroup.inflate(
+        inflateBinding: (
+            inflater: LayoutInflater,
+            root: ViewGroup?,
+            attachToRoot: Boolean
+        ) -> T, attachToRoot: Boolean = false
+    ): T {
+        val inflater = LayoutInflater.from(context)
+        return inflateBinding(inflater, this, attachToRoot)
+    }
 
     // Обрабатываем нажатие ImageButton
     fun checkedImageButton(

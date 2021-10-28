@@ -1,7 +1,11 @@
 package ru.popov.checkingsettings.data
 
+import android.R.attr.password
 import android.content.Context
+import android.os.Build
 import android.os.Environment
+import android.os.FileUtils
+import androidx.annotation.RequiresApi
 import com.squareup.moshi.Moshi
 import jcifs.smb1.smb1.NtlmPasswordAuthentication
 import jcifs.smb1.smb1.SmbFile
@@ -13,7 +17,15 @@ import ru.popov.checkingsettings.utils.JsonSettings
 import ru.popov.checkingsettings.utils.LoginInformation
 import ru.popov.checkingsettings.utils.Utils
 import timber.log.Timber
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.CopyOption
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class Repository(
     private val context: Context
@@ -32,15 +44,15 @@ class Repository(
 
 //            try {
 //                Timber.d("parse = $packageJson")
-                adapter.toJson(
-                    CheckingSettingsCustomAdapter.CustomCheckingSettings(
-                        JsonSettings.packageJson,
-                        JsonSettings.programJson,
-                        JsonSettings.assemblyAndLabelJson,
-                        JsonSettings.assemblyJson,
-                        JsonSettings.speakerTestJson
-                    )
+            adapter.toJson(
+                CheckingSettingsCustomAdapter.CustomCheckingSettings(
+                    JsonSettings.packageJson,
+                    JsonSettings.programJson,
+                    JsonSettings.assemblyAndLabelJson,
+                    JsonSettings.assemblyJson,
+                    JsonSettings.speakerTestJson
                 )
+            )
 //            } catch (e: Exception) {
 //                Timber.d("parse error = ${e.message}")
 //                ""
@@ -211,29 +223,29 @@ class Repository(
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) false
 
 //            try {
-                // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
-                val path = Utils.createFolderOnServer(date)
+            // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
+            val path = Utils.createFolderOnServer(date)
 
-                Timber.d("fileFolder = $path")
+            Timber.d("fileFolder = $path")
 
-                // Отслеживаем время загрузки данных
-                val start = System.currentTimeMillis()
+            // Отслеживаем время загрузки данных
+            val start = System.currentTimeMillis()
 
-                // Создаем объект аутентификатор
-                val auth =
-                    NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+            // Создаем объект аутентификатор
+            val auth =
+                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
 
-                // Создаем файл
-                val fileSettings = SmbFile(path + File.separator + LoginInformation.NAME_FILE, auth)
+            // Создаем файл
+            val fileSettings = SmbFile(path + File.separator + LoginInformation.NAME_FILE, auth)
 
-                // Создаем объект для потока куда мы будем писать наш файл
-                val destFileName = SmbFileOutputStream(fileSettings)
+            // Создаем объект для потока куда мы будем писать наш файл
+            val destFileName = SmbFileOutputStream(fileSettings)
 
-                destFileName.buffered().use { fileOutputStream ->
-                    fileOutputStream.write(strJson.toByteArray())
-                }
-                Timber.d("time = ${System.currentTimeMillis() - start}")
-                true
+            destFileName.buffered().use { fileOutputStream ->
+                fileOutputStream.write(strJson.toByteArray())
+            }
+            Timber.d("time = ${System.currentTimeMillis() - start}")
+            true
 //            } catch (t: Throwable) {
 //                Timber.d("t = $t")
 ////                file.delete()
@@ -242,33 +254,133 @@ class Repository(
         }
     }
 
+    // Сохраняем строку json в файл на сервере
+    suspend fun savePhotoToServer(byteArray: ByteArray, date: String): Boolean {
+        return withContext(Dispatchers.Default) {
+            if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) false
+
+//            try {
+            // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
+            val path = Utils.createFolderOnServer(date)
+
+            Timber.d("fileFolder = $path")
+
+            // Отслеживаем время загрузки данных
+            val start = System.currentTimeMillis()
+            val timeStamp: String = SimpleDateFormat("HH-mm-ss_dd-MM-yyyy").format(Date())
+
+            // Создаем объект аутентификатор
+            val auth =
+                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+
+            // Создаем файл
+            val fileSettings = SmbFile(path + File.separator + timeStamp + ".jpeg", auth)
+
+            // Создаем объект для потока куда мы будем писать наш файл
+            val destFileName = SmbFileOutputStream(fileSettings)
+
+            destFileName.buffered().use { fileOutputStream ->
+                fileOutputStream.write(byteArray)
+            }
+            Timber.d("time = ${System.currentTimeMillis() - start}")
+            true
+//            } catch (t: Throwable) {
+//                Timber.d("t = $t")
+////                file.delete()
+//                false
+//            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getImages(date: String): List<Image> {
+        val images = mutableListOf<Image>()
+        withContext(Dispatchers.Default) {
+            // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
+            val path = Utils.createFolderOnServer(date) + File.separator
+
+            val auth = NtlmPasswordAuthentication(
+                "", LoginInformation.USER, LoginInformation.PASS
+            )
+
+            // Ресолвим путь назначения в SmbFile
+            val baseDir = SmbFile(
+                path,
+                auth
+            )
+
+            Timber.d("path = $path")
+
+            val files = baseDir.listFiles()
+            for (i in files.indices) {
+                val fileName = files[i].name
+                val extension = fileName.substring(fileName.lastIndexOf(".") + 1)
+                if (extension != "jpeg") {
+                    continue
+                }
+                val smbFile = files[i]
+                val timeStamp: String = SimpleDateFormat("HH:mm:ss_dd-MM-yyyy").format(Date())
+                val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                val targetFile = File("$storageDir/$timeStamp.jpg")
+                if (!targetFile.exists()) {
+                    targetFile.createNewFile()
+                }
+                Files.copy(smbFile.inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+
+                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
+            }
+
+//            context.contentResolver.query(
+////                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                uri,
+//                null,
+//                null,
+//                null,
+//                null
+//            )?.use { cursor ->
+//                while (cursor.moveToNext()) {
+//                    val id = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))
+//                    val name =
+//                        cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
+//                    val size = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.SIZE))
+//
+//                    val uri =
+//                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+//
+//                    images += Image(id, uri, name, size)
+//                }
+//            }
+        }
+        return images
+    }
+
     // Загружаем с сервера строку json по выбранной дате
     suspend fun downloadFileToServer(year: String, month: String, day: String): String {
         return withContext(Dispatchers.Default) {
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) ""
 
 //            try {
-                // Создаем объект для аутентификации на шаре
-                val auth = NtlmPasswordAuthentication(
-                    "", LoginInformation.USER, LoginInformation.PASS
-                )
-                val path = LoginInformation.PATH
+            // Создаем объект для аутентификации на шаре
+            val auth = NtlmPasswordAuthentication(
+                "", LoginInformation.USER, LoginInformation.PASS
+            )
+            val path = LoginInformation.PATH
 
-                // Ресолвим путь назначения в SmbFile
-                val baseDir = SmbFile(
-                    "$path/$year/$month/$day/${LoginInformation.NAME_FILE}",
-                    auth
-                )
+            // Ресолвим путь назначения в SmbFile
+            val baseDir = SmbFile(
+                "$path/$year/$month/$day/${LoginInformation.NAME_FILE}",
+                auth
+            )
 
-                val destFileName = SmbFileInputStream(baseDir)
+            val destFileName = SmbFileInputStream(baseDir)
 
-                var stringJsonSettings = ""
-                destFileName.bufferedReader().use {
-                    stringJsonSettings = it.readText()
-                    Timber.d("str = $stringJsonSettings")
-                }
+            var stringJsonSettings = ""
+            destFileName.bufferedReader().use {
+                stringJsonSettings = it.readText()
+                Timber.d("str = $stringJsonSettings")
+            }
 
-                stringJsonSettings
+            stringJsonSettings
 //            } catch (t: Throwable) {
 //                Timber.d("t = $t")
 ////                file.delete()

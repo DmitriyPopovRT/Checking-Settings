@@ -4,4 +4,6 @@
     <string name="packageText">Упаковка</string>
     <string name="download_settings">Загрузка настроек</string>
     <string name="clear">Сброс</string>
+    <string name="attach_photo">Прикрепить фото</string>
+    <string name="take_photo">Сделать фото</string>
 </resources>

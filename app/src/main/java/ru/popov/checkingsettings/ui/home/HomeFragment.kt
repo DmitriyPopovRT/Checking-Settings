@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.delay
@@ -19,6 +20,8 @@ import ru.popov.checkingsettings.R
 import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter
 import ru.popov.checkingsettings.databinding.FragmentHomeBinding
 import ru.popov.checkingsettings.ui.*
+import ru.popov.checkingsettings.ui.home.image.ImagesAdapter
+import ru.popov.checkingsettings.utils.autoCleared
 import timber.log.Timber
 import java.time.LocalDateTime
 
@@ -26,6 +29,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
     private val viewModel: HomeViewModel by viewModels()
+    private var imagesAdapter: ImagesAdapter by autoCleared()
 
     private var packageFragment: PackageFragment? = null
     private var programTestFragment: ProgramTestFragment? = null
@@ -76,6 +80,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.titleCheckingSettings.isVisible = false
             binding.buttonClear.isVisible = false
             selectedDate = ""
+        }
+
+        binding.attachButton.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToImagesFragment(selectedDate))
         }
     }
 
@@ -153,6 +161,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.buttonClear.isVisible = true
             binding.constraint.setBackgroundColor(Color.LTGRAY)
         }
+        viewModel.imagesLiveData.observe(viewLifecycleOwner) { imagesAdapter.items = it }
     }
 
     // Собираем данные с вью во фрагментах

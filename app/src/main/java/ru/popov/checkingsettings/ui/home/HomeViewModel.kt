@@ -1,12 +1,16 @@
 package ru.popov.checkingsettings.ui.home
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.popov.checkingsettings.data.Image
 import ru.popov.checkingsettings.data.Repository
+import timber.log.Timber
 
 class HomeViewModel(
     application: Application
@@ -19,6 +23,7 @@ class HomeViewModel(
     private val isSendingLiveData = MutableLiveData<Boolean>()
     private val isDownloadSettingsLiveData = MutableLiveData<Boolean>()
     private val isErrorSettingsLiveData = MutableLiveData<String>()
+    private val imagesMutableLiveData = MutableLiveData<List<Image>>()
 
     val stringJsonSettings: LiveData<String>
         get() = stringJsonSettingsLiveData
@@ -31,6 +36,8 @@ class HomeViewModel(
         get() = isSendingLiveData
     val isDownloadSettings: LiveData<Boolean>
         get() = isDownloadSettingsLiveData
+    val imagesLiveData: LiveData<List<Image>>
+        get() = imagesMutableLiveData
 
     fun generateJson() {
         viewModelScope.launch {
@@ -38,6 +45,8 @@ class HomeViewModel(
             stringJsonSettingsLiveData.postValue(settingsJsonString)
         }
     }
+
+    fun deleteImage(id: Long) {}
 
     fun convertPackageResultToJson(
         wp29: Boolean?,
@@ -191,6 +200,23 @@ class HomeViewModel(
         }
     }
 
+    fun savePhotoToServer(byteArray: ByteArray, date: String) {
+        viewModelScope.launch {
+//            isLoadingLiveData.postValue(true)
+            try {
+                val result = repository.savePhotoToServer(byteArray, date)
+//                if (result) {
+//                    isSendingLiveData.postValue(true)
+//                }
+            } catch (t: Throwable) {
+//                isErrorSettingsLiveData.postValue(t.message)
+//                isErrorLiveData.postValue("")
+            } finally {
+//                isLoadingLiveData.postValue(false)
+            }
+        }
+    }
+
     fun downloadFileToServer(year: String, month: String, day: String) {
         viewModelScope.launch {
 //            isLoadingLiveData.postValue(true)
@@ -202,6 +228,23 @@ class HomeViewModel(
                 isErrorSettingsLiveData.postValue(t.message)
             } finally {
 //                isLoadingLiveData.postValue(false)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun loadImages(date: String) {
+        viewModelScope.launch {
+            try {
+                isSendingLiveData.postValue(true)
+                val images = repository.getImages(date)
+                imagesMutableLiveData.postValue(images)
+            } catch (t: Throwable) {
+                Timber.e(t)
+//                imagesMutableLiveData.postValue(emptyList())
+//                toastSingleLiveEvent.postValue(R.string.image_list_error)
+            } finally {
+                isSendingLiveData.postValue(false)
             }
         }
     }
