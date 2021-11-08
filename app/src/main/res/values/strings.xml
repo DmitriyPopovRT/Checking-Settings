@@ -6,4 +6,7 @@
     <string name="clear">Сброс</string>
     <string name="attach_photo">Прикрепить фото</string>
     <string name="take_photo">Сделать фото</string>
+    <string name="image_list_delete_error">Фото не удалено!</string>
+    <string name="image_list_error">Загрузка списка не удалась</string>
+    <string name="image_list_grant_permission">Предоставить разрешения</string>
 </resources>

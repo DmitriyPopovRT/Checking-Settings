@@ -83,7 +83,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.attachButton.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToImagesFragment(selectedDate))
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToImagesFragment(
+                    selectedDate
+                )
+            )
         }
     }
 

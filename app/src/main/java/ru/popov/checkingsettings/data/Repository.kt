@@ -1,11 +1,15 @@
 package ru.popov.checkingsettings.data
 
 import android.R.attr.password
+import android.annotation.SuppressLint
+import android.content.ContentUris
 import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.os.FileUtils
+import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import com.squareup.moshi.Moshi
 import jcifs.smb1.smb1.NtlmPasswordAuthentication
 import jcifs.smb1.smb1.SmbFile
@@ -327,29 +331,9 @@ class Repository(
                 }
                 Files.copy(smbFile.inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
 
-                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
+                images += Image(i.toLong(), targetFile.toUri(), fileName, files[i].length().toInt())
+//                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
             }
-
-//            context.contentResolver.query(
-////                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                uri,
-//                null,
-//                null,
-//                null,
-//                null
-//            )?.use { cursor ->
-//                while (cursor.moveToNext()) {
-//                    val id = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media._ID))
-//                    val name =
-//                        cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME))
-//                    val size = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.SIZE))
-//
-//                    val uri =
-//                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-//
-//                    images += Image(id, uri, name, size)
-//                }
-//            }
         }
         return images
     }

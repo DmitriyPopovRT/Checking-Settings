@@ -1,6 +1,8 @@
 package ru.popov.checkingsettings.ui.home
 
 import android.app.Application
+import android.app.RecoverableSecurityException
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
@@ -233,11 +235,12 @@ class HomeViewModel(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun loadImages(date: String) {
+    fun loadImages(date: String, context: Context) {
         viewModelScope.launch {
             try {
                 isSendingLiveData.postValue(true)
                 val images = repository.getImages(date)
+//                val images = repository.getImagesForLocaleMemory(context)
                 imagesMutableLiveData.postValue(images)
             } catch (t: Throwable) {
                 Timber.e(t)

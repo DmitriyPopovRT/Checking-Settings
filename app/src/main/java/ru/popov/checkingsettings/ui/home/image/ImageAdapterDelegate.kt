@@ -1,6 +1,7 @@
 package ru.popov.checkingsettings.ui.home.image
 
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -43,9 +44,9 @@ class ImageAdapterDelegate(
             currentImageId = item.id
             with(binding) {
                 nameTextView.text = item.name
-                sizeTextView.text = "${item.size} bytes"
+                sizeTextView.text = "${item.size / 1024} kB"
                 Glide.with(imageView)
-                    .load(item.file)
+                    .load(item.uri)
                     .placeholder(R.drawable.ic_image)
                     .into(imageView)
             }

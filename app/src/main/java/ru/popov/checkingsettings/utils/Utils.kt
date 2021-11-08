@@ -1,11 +1,15 @@
 package ru.popov.checkingsettings.utils
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import jcifs.smb1.smb1.NtlmPasswordAuthentication
 import jcifs.smb1.smb1.SmbFile
@@ -122,5 +126,13 @@ object Utils {
             }
             pathDay
         }
+    }
+
+    fun haveQ(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    }
+
+    fun <T : Fragment> T.toast(@StringRes message: Int) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
