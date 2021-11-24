@@ -1,12 +1,16 @@
 package ru.popov.checkingsettings.ui.home
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.SharedPreferences
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,8 +24,8 @@ import ru.popov.checkingsettings.R
 import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter
 import ru.popov.checkingsettings.databinding.FragmentHomeBinding
 import ru.popov.checkingsettings.ui.*
-import ru.popov.checkingsettings.ui.home.image.ImagesAdapter
-import ru.popov.checkingsettings.utils.autoCleared
+import ru.popov.checkingsettings.utils.LoginInformation
+import ru.popov.checkingsettings.utils.Utils.toast
 import timber.log.Timber
 import java.time.LocalDateTime
 
@@ -29,7 +33,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
     private val viewModel: HomeViewModel by viewModels()
-    private var imagesAdapter: ImagesAdapter by autoCleared()
 
     private var packageFragment: PackageFragment? = null
     private var programTestFragment: ProgramTestFragment? = null
@@ -37,28 +40,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var assemblyFragment: AssemblyFragment? = null
     private var speakerTestFragment: SpeakerTestFragment? = null
 
-    private var selectedDate = ""
+    private var selectedDateAsPath = ""
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private val currentDateTime = LocalDateTime.now()
+    private var selectedYear = currentDateTime.year
+    private var selectedMonth = currentDateTime.month.value
+    private var selectedDay = currentDateTime.dayOfMonth
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
         // Получаем инстансы фрагментов
         getFragment()
 
+        // Подписываемся на обновления вьюмодели
         bindViewModel()
 
         binding.buttonSendServer.setOnClickListener {
-            lifecycleScope.launch {
-                showProgressSend(false)
-                // Отправляем команды собрать информацию с вью и записать в строки json
-                sendSettings()
-
-                // Генерируем общую строку и отправляем на сервер
-                viewModel.generateJson()
-                showProgressSend(true)
-            }
+            // Проверяем существует ли файл настроек. Если существует, отправляем данные
+            viewModel.isExistFile(
+                selectedYear.toString(),
+                selectedMonth.toString(),
+                selectedDay.toString()
+            )
         }
 
+        // Кнопка загрузки настроек
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_load_settings -> {
@@ -72,23 +79,70 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }
 
+        // Кнопка очистить(Х)
+        // При нажатии закрывается история и показываются настройки сегодняшнего дня
         binding.buttonClear.setOnClickListener {
-            // Очищаем все вью
-            clearWorkspace()
-
-            binding.constraint.setBackgroundColor(Color.WHITE)
-            binding.titleCheckingSettings.isVisible = false
-            binding.buttonClear.isVisible = false
-            selectedDate = ""
+            setTodayDate()
+            loadSettings()
+            selectedDateAsPath = ""
         }
 
+        // Кнопка прикрепить фото
         binding.attachButton.setOnClickListener {
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToImagesFragment(
-                    selectedDate
-                )
+                HomeFragmentDirections.actionHomeFragmentToImagesFragment(selectedDateAsPath)
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+
+        // Загружаем настройки выбранного дня. По умолчанию сегодняшний
+        loadSettings()
+    }
+
+    // Диалог, возникающий если пользователь пытается перезаписать файл настроек, который уже есть
+    // на сервере. Если пользователь вводит пароль администратора, то данные перезаписываются
+    private fun adminVerification() {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(getString(R.string.access_confirmation))
+
+            val etInput = EditText(requireContext()).apply {
+                setSingleLine()
+                inputType = EditorInfo.TYPE_CLASS_NUMBER
+            }
+
+            setView(LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.VERTICAL
+                addView(TextView(requireContext()).apply {
+                    text = getString(R.string.admin_access_query)
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+                })
+                addView(etInput)
+                setPadding(32, 32, 32, 32)
+            })
+            setCancelable(false)
+
+            setNegativeButton(
+                getString(R.string.cancel)
+            ) { dialog, _ -> dialog.cancel() }
+
+            setPositiveButton(
+                getString(R.string.ok)
+            ) { _, _ ->
+                val et = etInput.text.toString()
+                if (et != LoginInformation.ADMIN_PASSWORD) {
+                    etInput.setText("")
+                    toast(R.string.password_incorrect)
+                    adminVerification()
+                } else {
+                    sendSettingsToServer()
+                    toast(R.string.access_confirmed)
+                }
+            }
+        }.create().show()
     }
 
     // Получаем инстансы фрагментов
@@ -108,9 +162,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     // Показываем/скрываем progressBar
     private fun showProgressSend(isSending: Boolean) {
         with(binding) {
-            buttonSendServer.isEnabled = isSending
-            scrollView2.isVisible = isSending
-            progressBar.isVisible = isSending.not()
+            buttonSendServer.isEnabled = isSending.not()
+            scrollView2.isVisible = isSending.not()
+            progressBar.isVisible = isSending
         }
     }
 
@@ -118,7 +172,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Получаем строку и отправляем ее файлом на сервер
         viewModel.stringJsonSettings.observe(viewLifecycleOwner) {
             Timber.e("СТРОКА - $it")
-            viewModel.saveFileToServer(it, selectedDate)
+            viewModel.saveFileToServer(it, selectedDateAsPath)
         }
         // Получаем строку json с сервера и парсим её
         viewModel.downloadStringJsonSettings.observe(viewLifecycleOwner) {
@@ -137,35 +191,50 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 setSettingsIsHistory(t)
             } catch (e: Exception) {
                 Timber.d("parse error = ${e.message}")
-                ""
             }
         }
         viewModel.isError.observe(viewLifecycleOwner) {
-            if (it == "The system cannot find the path specified.") {
-                Toast.makeText(
-                    requireContext(),
-                    "Ошибка! Файл не найден.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Ошибка! Нет подключения к серверу. Проверьте подключение Wi-Fi.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            when (it) {
+                "The system cannot find the path specified." -> {
+                    toast(R.string.path_not_found)
+                }
+                "The system cannot find the file specified." -> {
+                    if (!isTodaySettings())
+                        toast(R.string.file_not_found)
+                }
+                "Failed to connect to server" -> {
+                    toast(R.string.no_connection)
+                }
+                else -> {
+                    toast(it)
+                }
             }
 
             Timber.d("error = $it")
         }
         viewModel.isSending.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "Данные отправлены", Toast.LENGTH_SHORT).show()
+            toast(R.string.data_send)
         }
-        viewModel.isDownloadSettings.observe(viewLifecycleOwner) {
-            binding.titleCheckingSettings.isVisible = true
-            binding.buttonClear.isVisible = true
-            binding.constraint.setBackgroundColor(Color.LTGRAY)
+        viewModel.isFileSettingsExist.observe(viewLifecycleOwner) {
+            if (!it) {
+                sendSettingsToServer()
+            } else {
+                adminVerification()
+            }
         }
-        viewModel.imagesLiveData.observe(viewLifecycleOwner) { imagesAdapter.items = it }
+    }
+
+    // Отправка настроек на сервер
+    private fun sendSettingsToServer() {
+        lifecycleScope.launch {
+            showProgressSend(true)
+            // Отправляем команды собрать информацию с вью и записать в строки json
+            sendSettings()
+
+            // Генерируем общую строку и отправляем на сервер
+            viewModel.generateJson()
+            showProgressSend(false)
+        }
     }
 
     // Собираем данные с вью во фрагментах
@@ -186,26 +255,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         delay(500)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getDate() {
-        val currentDateTime = LocalDateTime.now()
+//        val currentDateTime = LocalDateTime.now()
         DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
-                // Очищаем все view
-                clearWorkspace()
-                // Получаем настройки с сервера
-                viewModel.downloadFileToServer(
-                    year.toString(),
-                    "${month + 1}",
-                    dayOfMonth.toString()
-                )
-                binding.titleCheckingSettings.text = "Настройки от $dayOfMonth.${month + 1}.$year"
-                selectedDate = "$year/${month + 1}/$dayOfMonth"
+                selectedYear = year
+                selectedMonth = month + 1
+                selectedDay = dayOfMonth
+                selectedDateAsPath = "$year/${month + 1}/$dayOfMonth"
+
+                loadSettings()
             },
-            currentDateTime.year,
-            currentDateTime.month.value - 1,
-            currentDateTime.dayOfMonth
+            selectedYear,
+            selectedMonth - 1,
+            selectedDay
+//            if (selectedYear == 0) currentDateTime.year else selectedYear,
+//            if (selectedMonth == 0) currentDateTime.month.value - 1 else selectedMonth - 1,
+//            if (selectedDay == 0) currentDateTime.dayOfMonth else selectedDay
         )
             .show()
     }
@@ -238,5 +305,55 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         assemblyAndLabelFragment?.clearView()
         assemblyFragment?.clearView()
         speakerTestFragment?.clearView()
+    }
+
+    private fun loadSettings() {
+        // Очищаем все view
+        clearWorkspace()
+
+        val currentDateTime = LocalDateTime.now()
+
+        if (isTodaySettings()) {
+            scene1()
+        } else {
+            scene2()
+        }
+
+        Timber.d("loadSettings")
+        // Получаем настройки с сервера
+        viewModel.downloadFileToServer(
+            selectedYear.toString(),
+            selectedMonth.toString(),
+            selectedDay.toString()
+        )
+    }
+
+    private fun scene1() {
+        binding.titleCheckingSettings.isVisible = false
+        binding.buttonClear.isVisible = false
+        binding.constraint.setBackgroundColor(Color.WHITE)
+    }
+
+    private fun scene2() {
+        binding.titleCheckingSettings.text =
+            "Настройки от $selectedDay.$selectedMonth.$selectedYear"
+
+        binding.titleCheckingSettings.isVisible = true
+        binding.buttonClear.isVisible = true
+        binding.constraint.setBackgroundColor(Color.LTGRAY)
+    }
+
+    private fun setTodayDate() {
+        val currentDateTime = LocalDateTime.now()
+        selectedYear = currentDateTime.year
+        selectedMonth = currentDateTime.month.value
+        selectedDay = currentDateTime.dayOfMonth
+    }
+
+    private fun isTodaySettings(): Boolean {
+        val currentDateTime = LocalDateTime.now()
+        return selectedYear == currentDateTime.year &&
+                selectedMonth == currentDateTime.month.value &&
+                selectedDay == currentDateTime.dayOfMonth
     }
 }

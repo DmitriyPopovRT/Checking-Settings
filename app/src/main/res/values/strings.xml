@@ -6,7 +6,16 @@
     <string name="clear">Сброс</string>
     <string name="attach_photo">Прикрепить фото</string>
     <string name="take_photo">Сделать фото</string>
-    <string name="image_list_delete_error">Фото не удалено!</string>
-    <string name="image_list_error">Загрузка списка не удалась</string>
     <string name="image_list_grant_permission">Предоставить разрешения</string>
+    <string name="list_empty">Список пуст</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">ОК</string>
+    <string name="password_incorrect">Ошибка! Неверный пароль. Введите еще раз</string>
+    <string name="access_confirmed">Доступ подтвержден</string>
+    <string name="admin_access_query">Файл проверки настроек за этот день уже существуют в БД. Если Вы хотите их перезаписать, то введите пароль администратора:</string>
+    <string name="access_confirmation">Подтверждение доступа</string>
+    <string name="path_not_found">Ошибка! Путь не найден.</string>
+    <string name="file_not_found">Ошибка! Файл не найден.</string>
+    <string name="no_connection">Ошибка! Нет подключения к серверу. Проверьте подключение Wi-Fi.</string>
+    <string name="data_send">Данные отправлены</string>
 </resources>

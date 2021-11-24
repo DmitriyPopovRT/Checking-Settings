@@ -20,6 +20,14 @@ import java.util.*
 
 object Utils {
 
+    fun <T : Fragment> T.toast(@StringRes message: Int) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun <T : Fragment> T.toast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     fun <T : ViewBinding> ViewGroup.inflate(
         inflateBinding: (
             inflater: LayoutInflater,
@@ -130,9 +138,5 @@ object Utils {
 
     fun haveQ(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-    }
-
-    fun <T : Fragment> T.toast(@StringRes message: Int) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

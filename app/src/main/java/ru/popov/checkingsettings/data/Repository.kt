@@ -1,15 +1,7 @@
 package ru.popov.checkingsettings.data
 
-import android.R.attr.password
-import android.annotation.SuppressLint
-import android.content.ContentUris
 import android.content.Context
-import android.os.Build
 import android.os.Environment
-import android.os.FileUtils
-import android.provider.MediaStore
-import androidx.annotation.RequiresApi
-import androidx.core.net.toUri
 import com.squareup.moshi.Moshi
 import jcifs.smb1.smb1.NtlmPasswordAuthentication
 import jcifs.smb1.smb1.SmbFile
@@ -21,10 +13,7 @@ import ru.popov.checkingsettings.utils.JsonSettings
 import ru.popov.checkingsettings.utils.LoginInformation
 import ru.popov.checkingsettings.utils.Utils
 import timber.log.Timber
-import java.io.ByteArrayInputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.nio.file.CopyOption
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.text.SimpleDateFormat
@@ -46,8 +35,6 @@ class Repository(
                 moshi.adapter(CheckingSettingsCustomAdapter.CustomCheckingSettings::class.java)
                     .nonNull()
 
-//            try {
-//                Timber.d("parse = $packageJson")
             adapter.toJson(
                 CheckingSettingsCustomAdapter.CustomCheckingSettings(
                     JsonSettings.packageJson,
@@ -57,10 +44,6 @@ class Repository(
                     JsonSettings.speakerTestJson
                 )
             )
-//            } catch (e: Exception) {
-//                Timber.d("parse error = ${e.message}")
-//                ""
-//            }
         }
     }
 
@@ -131,6 +114,7 @@ class Repository(
 
     // Собираем строку Сборка
     fun convertAssemblyResultToJson(
+        wp11AssemblyEB: String?,
         wp12AssemblyEB: String?,
         wp13AssemblyEB: String?,
         wp14AssemblyEB: String?,
@@ -139,6 +123,7 @@ class Repository(
         wp17AssemblyEB: String?,
         wp18AssemblyEB: String?,
         textNoteAssemblyEB: String?,
+        wp11AssemblyBip: String?,
         wp12AssemblyBip: String?,
         wp13AssemblyBip: String?,
         wp14AssemblyBip: String?,
@@ -147,6 +132,7 @@ class Repository(
         wp17AssemblyBip: String?,
         wp18AssemblyBip: String?,
         textNoteAssemblyBip: String?,
+        wp11AssemblySpeaker: String?,
         wp12AssemblySpeaker: String?,
         wp13AssemblySpeaker: String?,
         wp14AssemblySpeaker: String?,
@@ -155,6 +141,7 @@ class Repository(
         wp17AssemblySpeaker: String?,
         wp18AssemblySpeaker: String?,
         textNoteAssemblySpeaker: String?,
+        wp11AssemblySolderingTemperature: String?,
         wp12AssemblySolderingTemperature: String?,
         wp13AssemblySolderingTemperature: String?,
         wp14AssemblySolderingTemperature: String?,
@@ -162,10 +149,18 @@ class Repository(
         wp16AssemblySolderingTemperature: String?,
         wp17AssemblySolderingTemperature: String?,
         wp18AssemblySolderingTemperature: String?,
-        textNoteAssemblySolderingTemperature: String?
+        textNoteAssemblySolderingTemperature: String?,
+        wp23AssemblyFixing: String?,
+        wp24AssemblyFixing: String?,
+        wp25AssemblyFixing: String?,
+        wp26AssemblyFixing: String?,
+        wp27AssemblyFixing: String?,
+        wp28AssemblyFixing: String?,
+        textNoteAssemblyFixing: String?
     ) {
         JsonSettings.assemblyJson = CheckingSettingsCustomAdapter.AssemblyWrapper(
             CheckingSettingsCustomAdapter.AssemblyEB(
+                wp11AssemblyEB,
                 wp12AssemblyEB,
                 wp13AssemblyEB,
                 wp14AssemblyEB,
@@ -176,6 +171,7 @@ class Repository(
                 textNoteAssemblyEB
             ),
             CheckingSettingsCustomAdapter.AssemblyBIP(
+                wp11AssemblyBip,
                 wp12AssemblyBip,
                 wp13AssemblyBip,
                 wp14AssemblyBip,
@@ -186,6 +182,7 @@ class Repository(
                 textNoteAssemblyBip
             ),
             CheckingSettingsCustomAdapter.AssemblySpeaker(
+                wp11AssemblySpeaker,
                 wp12AssemblySpeaker,
                 wp13AssemblySpeaker,
                 wp14AssemblySpeaker,
@@ -196,6 +193,7 @@ class Repository(
                 textNoteAssemblySpeaker
             ),
             CheckingSettingsCustomAdapter.SolderingTemperature(
+                wp11AssemblySolderingTemperature,
                 wp12AssemblySolderingTemperature,
                 wp13AssemblySolderingTemperature,
                 wp14AssemblySolderingTemperature,
@@ -204,6 +202,15 @@ class Repository(
                 wp17AssemblySolderingTemperature,
                 wp18AssemblySolderingTemperature,
                 textNoteAssemblySolderingTemperature
+            ),
+            CheckingSettingsCustomAdapter.AssemblyFixing(
+                wp23AssemblyFixing,
+                wp24AssemblyFixing,
+                wp25AssemblyFixing,
+                wp26AssemblyFixing,
+                wp27AssemblyFixing,
+                wp28AssemblyFixing,
+                textNoteAssemblyFixing
             )
         )
     }
@@ -226,7 +233,6 @@ class Repository(
         return withContext(Dispatchers.Default) {
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) false
 
-//            try {
             // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
             val path = Utils.createFolderOnServer(date)
 
@@ -250,20 +256,14 @@ class Repository(
             }
             Timber.d("time = ${System.currentTimeMillis() - start}")
             true
-//            } catch (t: Throwable) {
-//                Timber.d("t = $t")
-////                file.delete()
-//                false
-//            }
         }
     }
 
-    // Сохраняем строку json в файл на сервере
+    // Сохраняем фото на сервере
     suspend fun savePhotoToServer(byteArray: ByteArray, date: String): Boolean {
         return withContext(Dispatchers.Default) {
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) false
 
-//            try {
             // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
             val path = Utils.createFolderOnServer(date)
 
@@ -271,7 +271,7 @@ class Repository(
 
             // Отслеживаем время загрузки данных
             val start = System.currentTimeMillis()
-            val timeStamp: String = SimpleDateFormat("HH-mm-ss_dd-MM-yyyy").format(Date())
+            val timeStamp: String = SimpleDateFormat("HH-mm-ss dd.MM.yyyy").format(Date())
 
             // Создаем объект аутентификатор
             val auth =
@@ -288,19 +288,14 @@ class Repository(
             }
             Timber.d("time = ${System.currentTimeMillis() - start}")
             true
-//            } catch (t: Throwable) {
-//                Timber.d("t = $t")
-////                file.delete()
-//                false
-//            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    // Получаем список фото с сервера
     suspend fun getImages(date: String): List<Image> {
         val images = mutableListOf<Image>()
         withContext(Dispatchers.Default) {
-            // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
+            // Создаем архитектуру папок на сервере и получаем путь к папке
             val path = Utils.createFolderOnServer(date) + File.separator
 
             val auth = NtlmPasswordAuthentication(
@@ -323,16 +318,33 @@ class Repository(
                     continue
                 }
                 val smbFile = files[i]
-                val timeStamp: String = SimpleDateFormat("HH:mm:ss_dd-MM-yyyy").format(Date())
                 val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                val targetFile = File("$storageDir/$timeStamp.jpg")
+                val targetFile = File("$storageDir/$fileName")
                 if (!targetFile.exists()) {
                     targetFile.createNewFile()
                 }
-                Files.copy(smbFile.inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
 
-                images += Image(i.toLong(), targetFile.toUri(), fileName, files[i].length().toInt())
-//                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
+                val smbFileInputStream = SmbFileInputStream(smbFile)
+                smbFileInputStream.use {
+                    Files.copy(
+                        it,
+                        targetFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                    )
+                }
+
+//                smbFile.inputStream.use { inputStream ->
+//                    Files.copy(
+//                        inputStream,
+//                        targetFile.toPath(),
+//                        StandardCopyOption.REPLACE_EXISTING
+//                    )
+//                }
+
+//                smbFile.inputStream.close()
+//                smbFile.outputStream.close()
+
+                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
             }
         }
         return images
@@ -343,7 +355,6 @@ class Repository(
         return withContext(Dispatchers.Default) {
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) ""
 
-//            try {
             // Создаем объект для аутентификации на шаре
             val auth = NtlmPasswordAuthentication(
                 "", LoginInformation.USER, LoginInformation.PASS
@@ -365,11 +376,54 @@ class Repository(
             }
 
             stringJsonSettings
-//            } catch (t: Throwable) {
-//                Timber.d("t = $t")
-////                file.delete()
-//                ""
-//            }
+        }
+    }
+
+    // Удаляем все файлы из временной папки с картинками
+    // Чтобы отобразить файлы с сервера, нужно создать их копии в памяти телефона
+    suspend fun deleteAllFilesFolder() {
+        withContext(Dispatchers.Default) {
+            val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+            for (myFile in File(storageDir?.path).listFiles()) {
+                if (myFile.isFile) {
+                    myFile.delete()
+                }
+            }
+        }
+    }
+
+    // Удаление фото
+    suspend fun deleteImage(date: String, name: String): Boolean {
+        return withContext(Dispatchers.Default) {
+            val path = Utils.createFolderOnServer(date)
+            // Создаем объект аутентификатор
+            val auth =
+                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+            // Ищем файл
+            val file = SmbFile(
+                path + File.separator + name, auth,
+                SmbFile.FILE_SHARE_READ or SmbFile.FILE_SHARE_WRITE or SmbFile.FILE_SHARE_DELETE
+            )
+            Timber.d("delete file = ${path + File.separator + name}")
+            file.delete()
+            true
+        }
+    }
+
+    // Проверяет существует ли файл настроек
+    suspend fun isExistFile(year: String, month: String, day: String): Boolean {
+        return withContext(Dispatchers.Default) {
+            // Создаем объект аутентификатор
+            val auth =
+                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+
+            // Ресолвим путь назначения в SmbFile
+            val baseDir = SmbFile(
+                "${LoginInformation.PATH}/$year/$month/$day/${LoginInformation.NAME_FILE}",
+                auth
+            )
+            baseDir.exists()
         }
     }
 }

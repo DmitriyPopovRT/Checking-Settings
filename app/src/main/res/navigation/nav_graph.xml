@@ -19,7 +19,27 @@
         android:label="ImagesFragment" >
         <action
             android:id="@+id/action_imagesFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment" />
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_imagesFragment_to_imageFullscreenFragment"
+            app:destination="@id/imageFullscreenFragment"
+            app:popUpTo="@id/imagesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageFullscreenFragment"
+        android:name="ru.popov.checkingsettings.ui.home.image.ImageFullscreenFragment"
+        android:label="ImageFullscreenFragment" >
+        <argument
+            android:name="image_id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_imageFullscreenFragment_to_imagesFragment"
+            app:destination="@id/imagesFragment"
+            app:popUpTo="@id/homeFragment" />
         <argument
             android:name="date"
             app:argType="string" />

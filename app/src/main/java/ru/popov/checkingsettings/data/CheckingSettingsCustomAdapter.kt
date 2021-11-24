@@ -81,6 +81,7 @@ class CheckingSettingsCustomAdapter {
     /* Assembly */
     @JsonClass(generateAdapter = true)
     data class AssemblyEB(
+        val wp11: String?,
         val wp12: String?,
         val wp13: String?,
         val wp14: String?,
@@ -93,6 +94,7 @@ class CheckingSettingsCustomAdapter {
 
     @JsonClass(generateAdapter = true)
     data class AssemblyBIP(
+        val wp11: String?,
         val wp12: String?,
         val wp13: String?,
         val wp14: String?,
@@ -105,6 +107,7 @@ class CheckingSettingsCustomAdapter {
 
     @JsonClass(generateAdapter = true)
     data class AssemblySpeaker(
+        val wp11: String?,
         val wp12: String?,
         val wp13: String?,
         val wp14: String?,
@@ -117,6 +120,7 @@ class CheckingSettingsCustomAdapter {
 
     @JsonClass(generateAdapter = true)
     data class SolderingTemperature(
+        val wp11: String?,
         val wp12: String?,
         val wp13: String?,
         val wp14: String?,
@@ -128,11 +132,23 @@ class CheckingSettingsCustomAdapter {
     )
 
     @JsonClass(generateAdapter = true)
+    data class AssemblyFixing(
+        val wp23: String?,
+        val wp24: String?,
+        val wp25: String?,
+        val wp26: String?,
+        val wp27: String?,
+        val wp28: String?,
+        val note: String?
+    )
+
+    @JsonClass(generateAdapter = true)
     data class AssemblyWrapper(
         val assemblyEB: AssemblyEB,
         val assemblyBIP: AssemblyBIP,
         val assemblySpeaker: AssemblySpeaker,
-        val solderingTemperature: SolderingTemperature
+        val solderingTemperature: SolderingTemperature,
+        val assemblyFixing: AssemblyFixing?
     )
 
     /* Speaker Test */

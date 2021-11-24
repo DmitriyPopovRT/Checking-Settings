@@ -1,24 +1,18 @@
 package ru.popov.checkingsettings.ui.home.image
 
 import android.Manifest
-import android.app.Activity
-import android.app.RemoteAction
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.GridLayout.HORIZONTAL
-import android.widget.Toast
+import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -27,14 +21,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.popov.checkingsettings.R
 import ru.popov.checkingsettings.databinding.FragmentImageBinding
 import ru.popov.checkingsettings.ui.home.HomeViewModel
-import ru.popov.checkingsettings.utils.Utils.haveQ
+import ru.popov.checkingsettings.utils.Utils
 import ru.popov.checkingsettings.utils.Utils.toast
 import ru.popov.checkingsettings.utils.autoCleared
 import timber.log.Timber
@@ -47,24 +38,21 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
     private val binding: FragmentImageBinding by viewBinding(FragmentImageBinding::bind)
     private val viewModel: HomeViewModel by viewModels()
-    private val imageViewModel: ImageListViewModel by viewModels()
     private var imagesAdapter: ImagesAdapter by autoCleared()
-    private val REQUEST_IMAGE_CAPTURE = 4321
-    lateinit var dateFromHomeFragment: String
-    lateinit var currentPhotoPath: String
+    private lateinit var dateFromHomeFragment: String
+    private lateinit var currentPhotoPath: String
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var recoverableActionLauncher: ActivityResultLauncher<IntentSenderRequest>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Запрашиваем разрешения на доступ к камере и файловой системе
         initPermissionResultListener()
-        initRecoverableActionListener()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Получаем аргументы из предыдущего фрагмента
         dateFromHomeFragment = arguments?.let { ImageFragmentArgs.fromBundle(it) }?.date.toString()
 
         initList()
@@ -72,7 +60,6 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
         if (hasPermission().not()) {
             requestPermissions()
         }
-//        viewModel.loadImages(dateFromHomeFragment, requireContext())
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigate(ImageFragmentDirections.actionImagesFragmentToHomeFragment())
         }
@@ -80,11 +67,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
             try {
                 dispatchTakePictureIntent()
             } catch (e: Exception) {
-                Toast.makeText(
-                    requireContext(),
-                    "Ошибка! Нет подключения к серверу",
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(R.string.no_connection)
             }
         }
         binding.grantPermissionButton.setOnClickListener {
@@ -94,78 +77,11 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
     override fun onResume() {
         super.onResume()
-        imageViewModel.updatePermissionState(hasPermission())
+        viewModel.updatePermissionState(hasPermission(), dateFromHomeFragment)
     }
-
-    private fun galleryAddPic(imageUri:Uri, title:String) {
-
-        val bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imageUri)
-        val savedImageURL = MediaStore.Images.Media.insertImage(
-            requireContext().contentResolver,
-            bitmap,
-            title,
-            "Image of $title"
-        )
-        Toast.makeText(requireContext(), "Picture Added to Gallery", Toast.LENGTH_SHORT).show()
-    }
-
-//    override suspend fun saveCameraImage(bitmap: Bitmap)
-//    {
-//        try {
-//            val collection = sdk29AndUp {
-//                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-//            } ?: MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//            val dirDest = File(
-//                Environment.DIRECTORY_PICTURES,
-//                context.getString(R.string.app_name)
-//            )
-//            val date = System.currentTimeMillis()
-//            val fileName = "$date.${IMAGE_EXTENSIONS}"
-//
-//
-//            val contentValues = ContentValues().apply {
-//                put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-//                put(MediaStore.MediaColumns.MIME_TYPE, "image/$IMAGE_EXTENSIONS")
-//                put(MediaStore.MediaColumns.DATE_ADDED, date)
-//                put(MediaStore.MediaColumns.DATE_MODIFIED, date)
-//                put(MediaStore.MediaColumns.SIZE, bitmap.byteCount)
-//                put(MediaStore.MediaColumns.WIDTH, bitmap.width)
-//                put(MediaStore.MediaColumns.HEIGHT, bitmap.height)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//
-//                    put(MediaStore.MediaColumns.RELATIVE_PATH, "$dirDest${File.separator}")
-//                    put(MediaStore.Images.Media.IS_PENDING, 1)
-//                }
-//            }
-//
-//            val imageUri = context.contentResolver.insert(collection, contentValues)
-//
-//
-//            withContext(Dispatchers.IO) {
-//
-//                imageUri?.let { uri ->
-//                    context.contentResolver.openOutputStream(uri, "w").use { out ->
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-//                    }
-//
-//                    contentValues.clear()
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                        contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)}
-//                    context.contentResolver.update(uri, contentValues, null, null)
-//                }
-//            }
-//
-//
-//
-//        } catch (e: FileNotFoundException) {
-//
-//        }
-//
-//    }
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        // Create an image file name
         val timeStamp: String = SimpleDateFormat("HH:mm:ss_dd-MM-yyyy").format(Date())
         val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
@@ -176,6 +92,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
             }
     }
 
+    // Ловим из интента фото
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -202,6 +119,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
         }
     }
 
+    // Запускаем камеру и делаем фото
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -210,32 +128,42 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
                 Timber.e("uri = ${currentPhotoPath.toUri()}")
                 val uriTest = "file://$currentPhotoPath".toUri()
-                val timeStamp: String = SimpleDateFormat("HH:mm:ss_dd-MM-yyyy").format(Date())
-                val title = "$timeStamp"
 
-                val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uriTest)
-                val savedImageURL = MediaStore.Images.Media.insertImage(
-                    requireContext().contentResolver,
-                    bitmap,
-                    title,
-                    "Image of $title"
-                )
-
-//                val inputStream = requireContext().contentResolver.openInputStream(uriTest)
-//                val byteArray = inputStream?.readBytes()
-//                byteArray?.let { viewModel.savePhotoToServer(it, dateFromHomeFragment) }
-//
-////                viewModel.loadImages(dateFromHomeFragment)
+                try {
+                    requireContext().contentResolver.openInputStream(uriTest).use { inputStream ->
+                        inputStream?.readBytes()?.let { byteArray ->
+                            viewModel.savePhotoToServer(byteArray, dateFromHomeFragment)
+                        }
+                    }
+//                    val byteArray = inputStream?.readBytes()
+//                    byteArray?.let { viewModel.savePhotoToServer(it, dateFromHomeFragment) }
+//                    inputStream?.close()
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
                 imagesAdapter.notifyDataSetChanged()
             }
             else -> {
-                Toast.makeText(requireContext(), "Wrong request code", Toast.LENGTH_SHORT).show()
+                toast("Wrong request code")
             }
         }
     }
 
+    // Ловим нажатие и открываем фото на весь экран
+    private fun onClickPhoto(uri: String) {
+        findNavController().navigate(
+            ImageFragmentDirections.actionImagesFragmentToImageFullscreenFragment(
+                uri,
+                dateFromHomeFragment
+            )
+        )
+    }
+
     private fun initList() {
-        imagesAdapter = ImagesAdapter(imageViewModel::deleteImage)
+        imagesAdapter = ImagesAdapter(
+            { deleteConfirmation(it) },
+            { onClickPhoto(it) }
+        )
         with(binding.imagesList) {
             layoutManager = GridLayoutManager(requireContext(), 3)
             setHasFixedSize(true)
@@ -244,25 +172,33 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
     }
 
     private fun bindViewModel() {
-//        viewModel.imagesLiveData.observe(viewLifecycleOwner) { imagesAdapter.items = it }
-//        viewModel.isSending.observe(viewLifecycleOwner) {
-//            if (it) {
-//                binding.progressBar.visibility = View.VISIBLE
-//            } else {
-//                binding.progressBar.visibility = View.GONE
-//            }
-//        }
-
-        imageViewModel.toastLiveData.observe(viewLifecycleOwner) { toast(it) }
-        imageViewModel.imagesLiveData.observe(viewLifecycleOwner) { imagesAdapter.items = it }
-        imageViewModel.permissionsGrantedLiveData.observe(viewLifecycleOwner, ::updatePermissionUi)
-        imageViewModel.recoverableActionLiveData.observe(viewLifecycleOwner, ::handleRecoverableAction)
+        viewModel.imagesLiveData.observe(viewLifecycleOwner) {
+            imagesAdapter.items = it
+            if (it.isEmpty()) binding.listEmpty.visibility = View.VISIBLE
+            else binding.listEmpty.visibility = View.GONE
+        }
+        viewModel.isSendingImages.observe(viewLifecycleOwner) {
+            if (it) binding.progressBar.visibility = View.VISIBLE
+            else binding.progressBar.visibility = View.GONE
+        }
+        viewModel.isSendingPhoto.observe(viewLifecycleOwner) {
+            if (it) viewModel.loadImages(dateFromHomeFragment)
+        }
+        viewModel.permissionsGrantedLiveData.observe(viewLifecycleOwner, ::updatePermissionUi)
+        viewModel.isDeletePhoto.observe(viewLifecycleOwner) {
+            viewModel.loadImages(dateFromHomeFragment)
+        }
     }
 
     private fun updatePermissionUi(isGranted: Boolean) {
         binding.grantPermissionButton.isVisible = isGranted.not()
-//        binding.addImageButton.isVisible = isGranted
         binding.imagesList.isVisible = isGranted
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.d("onDestroyView")
+        viewModel.deleteAllFilesFolder()
     }
 
     private fun hasPermission(): Boolean {
@@ -279,22 +215,9 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissionToGrantedMap: Map<String, Boolean> ->
             if (permissionToGrantedMap.values.all { it }) {
-                imageViewModel.permissionsGranted()
+                viewModel.permissionsGranted(dateFromHomeFragment)
             } else {
-                imageViewModel.permissionsDenied()
-            }
-        }
-    }
-
-    private fun initRecoverableActionListener() {
-        recoverableActionLauncher = registerForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
-        ) {  activityResult ->
-            val isConfirmed = activityResult.resultCode == Activity.RESULT_OK
-            if(isConfirmed) {
-                imageViewModel.confirmDelete()
-            } else {
-                imageViewModel.declineDelete()
+                viewModel.permissionsDenied()
             }
         }
     }
@@ -303,19 +226,34 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
         requestPermissionLauncher.launch(*PERMISSIONS.toTypedArray())
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun handleRecoverableAction(action: RemoteAction) {
-        val request = IntentSenderRequest.Builder(action.actionIntent.intentSender)
-            .build()
-        recoverableActionLauncher.launch(request)
+    // Диалог подтверждения удаления
+    private fun deleteConfirmation(name: String) {
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.delete_confirm_dialog, null)
+        val positiveButton = dialogView.findViewById<Button>(R.id.positiveButton)
+        val negativeButton = dialogView.findViewById<Button>(R.id.negativeButton)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .show()
+
+        positiveButton.setOnClickListener {
+            viewModel.deleteImage(dateFromHomeFragment, name)
+            dialog.dismiss()
+        }
+
+        negativeButton.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     companion object {
+        private const val REQUEST_IMAGE_CAPTURE = 4321
         private val PERMISSIONS = listOfNotNull(
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
-                .takeIf { haveQ().not() }
+                .takeIf { Utils.haveQ().not() }
         )
     }
 }

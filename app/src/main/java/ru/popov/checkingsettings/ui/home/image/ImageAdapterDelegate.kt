@@ -12,7 +12,8 @@ import ru.popov.checkingsettings.databinding.ItemImageBinding
 import ru.popov.checkingsettings.utils.Utils.inflate
 
 class ImageAdapterDelegate(
-    private val onDeleteImage: (id: Long) -> Unit
+    private val onDeleteImage: (name: String) -> Unit,
+    private val onClickImage: (name: String) -> Unit
 ) : AbsListItemAdapterDelegate<Image, Image, ImageAdapterDelegate.Holder>() {
 
     override fun isForViewType(item: Image, items: MutableList<Image>, position: Int): Boolean {
@@ -20,7 +21,7 @@ class ImageAdapterDelegate(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): Holder {
-        return parent.inflate(ItemImageBinding::inflate).let { Holder(it, onDeleteImage) }
+        return parent.inflate(ItemImageBinding::inflate).let { Holder(it, onDeleteImage, onClickImage) }
     }
 
     override fun onBindViewHolder(item: Image, holder: Holder, payloads: MutableList<Any>) {
@@ -29,24 +30,31 @@ class ImageAdapterDelegate(
 
     class Holder(
         private val binding: ItemImageBinding,
-        onDeleteImage: (id: Long) -> Unit
+        onDeleteImage: (name: String) -> Unit,
+        onClickImage: (name: String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var currentImageId: Long? = null
+        private var currentImageName: String? = null
+        private var currentImageClick: String? = null
 
         init {
             binding.deleteButton.setOnClickListener {
-                currentImageId?.let(onDeleteImage)
+                currentImageName?.let(onDeleteImage)
+            }
+            binding.constraintItem.setOnClickListener {
+                currentImageClick?.let(onClickImage)
             }
         }
 
         fun bind(item: Image) {
-            currentImageId = item.id
+            currentImageName = item.name
+            currentImageClick = item.file.toUri().toString()
+
             with(binding) {
                 nameTextView.text = item.name
-                sizeTextView.text = "${item.size / 1024} kB"
+                sizeTextView.text = "${item.size / 1024} КБ"
                 Glide.with(imageView)
-                    .load(item.uri)
+                    .load(item.file)
                     .placeholder(R.drawable.ic_image)
                     .into(imageView)
             }

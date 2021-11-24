@@ -5,14 +5,15 @@ import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 import ru.popov.checkingsettings.data.Image
 
 class ImagesAdapter(
-    onDeleteImage: (id: Long) -> Unit
-): AsyncListDifferDelegationAdapter<Image>(ImageDiffUtilCallback()) {
+    onDeleteImage: (name: String) -> Unit,
+    onClickImage: (name: String) -> Unit
+) : AsyncListDifferDelegationAdapter<Image>(ImageDiffUtilCallback()) {
 
     init {
-        delegatesManager.addDelegate(ImageAdapterDelegate(onDeleteImage))
+        delegatesManager.addDelegate(ImageAdapterDelegate(onDeleteImage, onClickImage))
     }
 
-    class ImageDiffUtilCallback: DiffUtil.ItemCallback<Image>() {
+    class ImageDiffUtilCallback : DiffUtil.ItemCallback<Image>() {
         override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
             return oldItem.id == newItem.id
         }

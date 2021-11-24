@@ -1,10 +1,6 @@
 package ru.popov.checkingsettings.ui.home
 
 import android.app.Application
-import android.app.RecoverableSecurityException
-import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.popov.checkingsettings.data.Image
 import ru.popov.checkingsettings.data.Repository
+import ru.popov.checkingsettings.utils.SingleLiveEvent
+import ru.popov.checkingsettings.utils.Utils.haveQ
 import timber.log.Timber
 
 class HomeViewModel(
@@ -20,12 +18,16 @@ class HomeViewModel(
 
     private val repository = Repository(application)
 
-    private val stringJsonSettingsLiveData = MutableLiveData<String>()
-    private val downloadStringJsonSettingsLiveData = MutableLiveData<String>()
-    private val isSendingLiveData = MutableLiveData<Boolean>()
-    private val isDownloadSettingsLiveData = MutableLiveData<Boolean>()
-    private val isErrorSettingsLiveData = MutableLiveData<String>()
-    private val imagesMutableLiveData = MutableLiveData<List<Image>>()
+    private val stringJsonSettingsLiveData = SingleLiveEvent<String>()
+    private val downloadStringJsonSettingsLiveData = SingleLiveEvent<String>()
+    private val isSendingLiveData = SingleLiveEvent<Boolean>()
+    private val isSendingImagesLiveData = SingleLiveEvent<Boolean>()
+    private val isErrorSettingsLiveData = SingleLiveEvent<String>()
+    private val imagesMutableLiveData = SingleLiveEvent<List<Image>>()
+    private val isSendingPhotoLiveData = SingleLiveEvent<Boolean>()
+    private val isDeletePhotoLiveData = SingleLiveEvent<Boolean>()
+    private val isFileSettingsExistLiveData = SingleLiveEvent<Boolean>()
+    private val permissionsGrantedMutableLiveData = MutableLiveData(true)
 
     val stringJsonSettings: LiveData<String>
         get() = stringJsonSettingsLiveData
@@ -36,10 +38,18 @@ class HomeViewModel(
         get() = isErrorSettingsLiveData
     val isSending: LiveData<Boolean>
         get() = isSendingLiveData
-    val isDownloadSettings: LiveData<Boolean>
-        get() = isDownloadSettingsLiveData
+    val isSendingImages: LiveData<Boolean>
+        get() = isSendingImagesLiveData
+    val isSendingPhoto: LiveData<Boolean>
+        get() = isSendingPhotoLiveData
+    val isDeletePhoto: LiveData<Boolean>
+        get() = isDeletePhotoLiveData
+    val isFileSettingsExist: LiveData<Boolean>
+        get() = isFileSettingsExistLiveData
     val imagesLiveData: LiveData<List<Image>>
         get() = imagesMutableLiveData
+    val permissionsGrantedLiveData: LiveData<Boolean>
+        get() = permissionsGrantedMutableLiveData
 
     fun generateJson() {
         viewModelScope.launch {
@@ -47,8 +57,6 @@ class HomeViewModel(
             stringJsonSettingsLiveData.postValue(settingsJsonString)
         }
     }
-
-    fun deleteImage(id: Long) {}
 
     fun convertPackageResultToJson(
         wp29: Boolean?,
@@ -105,6 +113,7 @@ class HomeViewModel(
     }
 
     fun convertAssemblyResultToJson(
+        wp11AssemblyEB: String?,
         wp12AssemblyEB: String?,
         wp13AssemblyEB: String?,
         wp14AssemblyEB: String?,
@@ -113,6 +122,7 @@ class HomeViewModel(
         wp17AssemblyEB: String?,
         wp18AssemblyEB: String?,
         textNoteAssemblyEB: String?,
+        wp11AssemblyBip: String?,
         wp12AssemblyBip: String?,
         wp13AssemblyBip: String?,
         wp14AssemblyBip: String?,
@@ -121,6 +131,7 @@ class HomeViewModel(
         wp17AssemblyBip: String?,
         wp18AssemblyBip: String?,
         textNoteAssemblyBip: String?,
+        wp11AssemblySpeaker: String?,
         wp12AssemblySpeaker: String?,
         wp13AssemblySpeaker: String?,
         wp14AssemblySpeaker: String?,
@@ -129,6 +140,7 @@ class HomeViewModel(
         wp17AssemblySpeaker: String?,
         wp18AssemblySpeaker: String?,
         textNoteAssemblySpeaker: String?,
+        wp11AssemblySolderingTemperature: String?,
         wp12AssemblySolderingTemperature: String?,
         wp13AssemblySolderingTemperature: String?,
         wp14AssemblySolderingTemperature: String?,
@@ -136,10 +148,18 @@ class HomeViewModel(
         wp16AssemblySolderingTemperature: String?,
         wp17AssemblySolderingTemperature: String?,
         wp18AssemblySolderingTemperature: String?,
-        textNoteAssemblySolderingTemperature: String?
+        textNoteAssemblySolderingTemperature: String?,
+        wp23AssemblyFixing: String?,
+        wp24AssemblyFixing: String?,
+        wp25AssemblyFixing: String?,
+        wp26AssemblyFixing: String?,
+        wp27AssemblyFixing: String?,
+        wp28AssemblyFixing: String?,
+        textNoteAssemblyFixing: String?
     ) {
         viewModelScope.launch {
             repository.convertAssemblyResultToJson(
+                wp11AssemblyEB,
                 wp12AssemblyEB,
                 wp13AssemblyEB,
                 wp14AssemblyEB,
@@ -148,6 +168,7 @@ class HomeViewModel(
                 wp17AssemblyEB,
                 wp18AssemblyEB,
                 textNoteAssemblyEB,
+                wp11AssemblyBip,
                 wp12AssemblyBip,
                 wp13AssemblyBip,
                 wp14AssemblyBip,
@@ -156,6 +177,7 @@ class HomeViewModel(
                 wp17AssemblyBip,
                 wp18AssemblyBip,
                 textNoteAssemblyBip,
+                wp11AssemblySpeaker,
                 wp12AssemblySpeaker,
                 wp13AssemblySpeaker,
                 wp14AssemblySpeaker,
@@ -164,6 +186,7 @@ class HomeViewModel(
                 wp17AssemblySpeaker,
                 wp18AssemblySpeaker,
                 textNoteAssemblySpeaker,
+                wp11AssemblySolderingTemperature,
                 wp12AssemblySolderingTemperature,
                 wp13AssemblySolderingTemperature,
                 wp14AssemblySolderingTemperature,
@@ -171,7 +194,14 @@ class HomeViewModel(
                 wp16AssemblySolderingTemperature,
                 wp17AssemblySolderingTemperature,
                 wp18AssemblySolderingTemperature,
-                textNoteAssemblySolderingTemperature
+                textNoteAssemblySolderingTemperature,
+                wp23AssemblyFixing,
+                wp24AssemblyFixing,
+                wp25AssemblyFixing,
+                wp26AssemblyFixing,
+                wp27AssemblyFixing,
+                wp28AssemblyFixing,
+                textNoteAssemblyFixing
             )
         }
     }
@@ -185,6 +215,26 @@ class HomeViewModel(
         }
     }
 
+    fun updatePermissionState(isGranted: Boolean, date: String) {
+        if (isGranted) {
+            permissionsGranted(date)
+        } else {
+            permissionsDenied()
+        }
+    }
+
+    fun permissionsGranted(date: String) {
+        if (haveQ()) {
+            loadImages(date)
+        }
+
+        permissionsGrantedMutableLiveData.postValue(true)
+    }
+
+    fun permissionsDenied() {
+        permissionsGrantedMutableLiveData.postValue(false)
+    }
+
     fun saveFileToServer(strJson: String, date: String) {
         viewModelScope.launch {
 //            isLoadingLiveData.postValue(true)
@@ -194,6 +244,7 @@ class HomeViewModel(
                     isSendingLiveData.postValue(true)
                 }
             } catch (t: Throwable) {
+                Timber.e(t)
                 isErrorSettingsLiveData.postValue(t.message)
 //                isErrorLiveData.postValue("")
             } finally {
@@ -207,10 +258,11 @@ class HomeViewModel(
 //            isLoadingLiveData.postValue(true)
             try {
                 val result = repository.savePhotoToServer(byteArray, date)
-//                if (result) {
-//                    isSendingLiveData.postValue(true)
-//                }
+                if (result) {
+                    isSendingPhotoLiveData.postValue(true)
+                }
             } catch (t: Throwable) {
+                Timber.e(t)
 //                isErrorSettingsLiveData.postValue(t.message)
 //                isErrorLiveData.postValue("")
             } finally {
@@ -225,8 +277,8 @@ class HomeViewModel(
             try {
                 val result = repository.downloadFileToServer(year, month, day)
                 downloadStringJsonSettingsLiveData.postValue(result)
-                isDownloadSettingsLiveData.postValue(true)
             } catch (t: Throwable) {
+                Timber.e(t)
                 isErrorSettingsLiveData.postValue(t.message)
             } finally {
 //                isLoadingLiveData.postValue(false)
@@ -234,20 +286,52 @@ class HomeViewModel(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun loadImages(date: String, context: Context) {
+    fun loadImages(date: String) {
         viewModelScope.launch {
             try {
-                isSendingLiveData.postValue(true)
+                isSendingImagesLiveData.postValue(true)
                 val images = repository.getImages(date)
-//                val images = repository.getImagesForLocaleMemory(context)
                 imagesMutableLiveData.postValue(images)
             } catch (t: Throwable) {
                 Timber.e(t)
 //                imagesMutableLiveData.postValue(emptyList())
 //                toastSingleLiveEvent.postValue(R.string.image_list_error)
             } finally {
-                isSendingLiveData.postValue(false)
+                isSendingImagesLiveData.postValue(false)
+            }
+        }
+    }
+
+    fun deleteAllFilesFolder() {
+        viewModelScope.launch {
+            repository.deleteAllFilesFolder()
+        }
+    }
+
+    fun deleteImage(date: String, name: String) {
+        viewModelScope.launch {
+            try {
+                Timber.d("delete $name date = $date")
+                val result = repository.deleteImage(date, name)
+                if (result) {
+                    isDeletePhotoLiveData.postValue(true)
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                isErrorSettingsLiveData.postValue(e.message)
+            }
+
+        }
+    }
+
+    fun isExistFile(year: String, month: String, day: String) {
+        viewModelScope.launch {
+            try {
+                val result = repository.isExistFile(year, month, day)
+                isFileSettingsExistLiveData.postValue(result)
+            } catch (e: Exception) {
+                Timber.e(e)
+                isErrorSettingsLiveData.postValue(e.message)
             }
         }
     }
