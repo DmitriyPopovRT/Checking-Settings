@@ -6,11 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter
 import ru.popov.checkingsettings.data.Image
 import ru.popov.checkingsettings.data.Repository
 import ru.popov.checkingsettings.utils.SingleLiveEvent
 import ru.popov.checkingsettings.utils.Utils.haveQ
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.HashMap
+import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter.ValueAndCalibration
 
 class HomeViewModel(
     application: Application
@@ -19,7 +23,8 @@ class HomeViewModel(
     private val repository = Repository(application)
 
     private val stringJsonSettingsLiveData = SingleLiveEvent<String>()
-    private val downloadStringJsonSettingsLiveData = SingleLiveEvent<String>()
+    private val downloadStringJsonSettingsLiveData =
+        SingleLiveEvent<CheckingSettingsCustomAdapter.CustomCheckingSettings?>()
     private val isSendingLiveData = SingleLiveEvent<Boolean>()
     private val isSendingImagesLiveData = SingleLiveEvent<Boolean>()
     private val isErrorSettingsLiveData = SingleLiveEvent<String>()
@@ -28,10 +33,11 @@ class HomeViewModel(
     private val isDeletePhotoLiveData = SingleLiveEvent<Boolean>()
     private val isFileSettingsExistLiveData = SingleLiveEvent<Boolean>()
     private val permissionsGrantedMutableLiveData = MutableLiveData(true)
+    private val listStatisticsMutableLiveData = SingleLiveEvent<HashMap<Date, ValueAndCalibration>>()
 
     val stringJsonSettings: LiveData<String>
         get() = stringJsonSettingsLiveData
-    val downloadStringJsonSettings: LiveData<String>
+    val downloadStringJsonSettings: LiveData<CheckingSettingsCustomAdapter.CustomCheckingSettings?>
         get() = downloadStringJsonSettingsLiveData
 
     val isError: LiveData<String>
@@ -50,6 +56,8 @@ class HomeViewModel(
         get() = imagesMutableLiveData
     val permissionsGrantedLiveData: LiveData<Boolean>
         get() = permissionsGrantedMutableLiveData
+    val listStatistics: LiveData<HashMap<Date, ValueAndCalibration>>
+        get() = listStatisticsMutableLiveData
 
     fun generateJson() {
         viewModelScope.launch {
@@ -113,48 +121,48 @@ class HomeViewModel(
     }
 
     fun convertAssemblyResultToJson(
-        wp11AssemblyEB: String?,
-        wp12AssemblyEB: String?,
-        wp13AssemblyEB: String?,
-        wp14AssemblyEB: String?,
-        wp15AssemblyEB: String?,
-        wp16AssemblyEB: String?,
-        wp17AssemblyEB: String?,
-        wp18AssemblyEB: String?,
+        wp11AssemblyEB: ValueAndCalibration?,
+        wp12AssemblyEB: ValueAndCalibration?,
+        wp13AssemblyEB: ValueAndCalibration?,
+        wp14AssemblyEB: ValueAndCalibration?,
+        wp15AssemblyEB: ValueAndCalibration?,
+        wp16AssemblyEB: ValueAndCalibration?,
+        wp17AssemblyEB: ValueAndCalibration?,
+        wp18AssemblyEB: ValueAndCalibration?,
         textNoteAssemblyEB: String?,
-        wp11AssemblyBip: String?,
-        wp12AssemblyBip: String?,
-        wp13AssemblyBip: String?,
-        wp14AssemblyBip: String?,
-        wp15AssemblyBip: String?,
-        wp16AssemblyBip: String?,
-        wp17AssemblyBip: String?,
-        wp18AssemblyBip: String?,
+        wp11AssemblyBip: ValueAndCalibration?,
+        wp12AssemblyBip: ValueAndCalibration?,
+        wp13AssemblyBip: ValueAndCalibration?,
+        wp14AssemblyBip: ValueAndCalibration?,
+        wp15AssemblyBip: ValueAndCalibration?,
+        wp16AssemblyBip: ValueAndCalibration?,
+        wp17AssemblyBip: ValueAndCalibration?,
+        wp18AssemblyBip: ValueAndCalibration?,
         textNoteAssemblyBip: String?,
-        wp11AssemblySpeaker: String?,
-        wp12AssemblySpeaker: String?,
-        wp13AssemblySpeaker: String?,
-        wp14AssemblySpeaker: String?,
-        wp15AssemblySpeaker: String?,
-        wp16AssemblySpeaker: String?,
-        wp17AssemblySpeaker: String?,
-        wp18AssemblySpeaker: String?,
+        wp11AssemblySpeaker: ValueAndCalibration?,
+        wp12AssemblySpeaker: ValueAndCalibration?,
+        wp13AssemblySpeaker: ValueAndCalibration?,
+        wp14AssemblySpeaker: ValueAndCalibration?,
+        wp15AssemblySpeaker: ValueAndCalibration?,
+        wp16AssemblySpeaker: ValueAndCalibration?,
+        wp17AssemblySpeaker: ValueAndCalibration?,
+        wp18AssemblySpeaker: ValueAndCalibration?,
         textNoteAssemblySpeaker: String?,
-        wp11AssemblySolderingTemperature: String?,
-        wp12AssemblySolderingTemperature: String?,
-        wp13AssemblySolderingTemperature: String?,
-        wp14AssemblySolderingTemperature: String?,
-        wp15AssemblySolderingTemperature: String?,
-        wp16AssemblySolderingTemperature: String?,
-        wp17AssemblySolderingTemperature: String?,
-        wp18AssemblySolderingTemperature: String?,
+        wp11AssemblySolderingTemperature: ValueAndCalibration?,
+        wp12AssemblySolderingTemperature: ValueAndCalibration?,
+        wp13AssemblySolderingTemperature: ValueAndCalibration?,
+        wp14AssemblySolderingTemperature: ValueAndCalibration?,
+        wp15AssemblySolderingTemperature: ValueAndCalibration?,
+        wp16AssemblySolderingTemperature: ValueAndCalibration?,
+        wp17AssemblySolderingTemperature: ValueAndCalibration?,
+        wp18AssemblySolderingTemperature: ValueAndCalibration?,
         textNoteAssemblySolderingTemperature: String?,
-        wp23AssemblyFixing: String?,
-        wp24AssemblyFixing: String?,
-        wp25AssemblyFixing: String?,
-        wp26AssemblyFixing: String?,
-        wp27AssemblyFixing: String?,
-        wp28AssemblyFixing: String?,
+        wp23AssemblyFixing: ValueAndCalibration?,
+        wp24AssemblyFixing: ValueAndCalibration?,
+        wp25AssemblyFixing: ValueAndCalibration?,
+        wp26AssemblyFixing: ValueAndCalibration?,
+        wp27AssemblyFixing: ValueAndCalibration?,
+        wp28AssemblyFixing: ValueAndCalibration?,
         textNoteAssemblyFixing: String?
     ) {
         viewModelScope.launch {
@@ -275,8 +283,10 @@ class HomeViewModel(
         viewModelScope.launch {
 //            isLoadingLiveData.postValue(true)
             try {
-                val result = repository.downloadFileToServer(year, month, day)
-                downloadStringJsonSettingsLiveData.postValue(result)
+//                val result = repository.downloadFileToServer(year, month, day)
+//                val adapter = stringJsonToCustomAdapter(result)
+                val adapter = repository.download(year, month, day)
+                downloadStringJsonSettingsLiveData.postValue(adapter)
             } catch (t: Throwable) {
                 Timber.e(t)
                 isErrorSettingsLiveData.postValue(t.message)
@@ -329,6 +339,24 @@ class HomeViewModel(
             try {
                 val result = repository.isExistFile(year, month, day)
                 isFileSettingsExistLiveData.postValue(result)
+            } catch (e: Exception) {
+                Timber.e(e)
+                isErrorSettingsLiveData.postValue(e.message)
+            }
+        }
+    }
+
+    fun downloadStatistics(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String,
+        workPlace: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = repository.downloadStatistics(year, month, day, operation, workPlace)
+                listStatisticsMutableLiveData.postValue(result)
             } catch (e: Exception) {
                 Timber.e(e)
                 isErrorSettingsLiveData.postValue(e.message)

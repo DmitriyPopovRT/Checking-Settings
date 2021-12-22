@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -93,6 +94,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 HomeFragmentDirections.actionHomeFragmentToImagesFragment(selectedDateAsPath)
             )
         }
+
+        // Кнопка статистика
+        binding.statisticsButton.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToStatisticsFragment()
+            )
+        }
     }
 
     override fun onResume() {
@@ -101,6 +109,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Загружаем настройки выбранного дня. По умолчанию сегодняшний
         loadSettings()
+
+        assemblyFragment?.onLongClickEditText()
     }
 
     // Диалог, возникающий если пользователь пытается перезаписать файл настроек, который уже есть
@@ -176,21 +186,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
         // Получаем строку json с сервера и парсим её
         viewModel.downloadStringJsonSettings.observe(viewLifecycleOwner) {
-            Timber.e("СТРОКА ОТ СЕРВЕРА - $it")
-            val moshi = Moshi.Builder()
-                .add(CheckingSettingsCustomAdapter())
-                .build()
-
-            val adapter =
-                moshi.adapter(CheckingSettingsCustomAdapter.CustomCheckingSettings::class.java)
-                    .nonNull()
-
             try {
-                val t = adapter.fromJson(it)
-                Timber.d("parse t = $t")
-                setSettingsIsHistory(t)
+                setSettingsIsHistory(it)
             } catch (e: Exception) {
-                Timber.d("parse error = ${e.message}")
+                Timber.d("error = ${e.message}")
             }
         }
         viewModel.isError.observe(viewLifecycleOwner) {
@@ -206,7 +205,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     toast(R.string.no_connection)
                 }
                 else -> {
-                    toast(it)
+                    Toast.makeText(requireContext(), "$it", Toast.LENGTH_LONG).show()
+//                    toast(it)
                 }
             }
 
@@ -219,7 +219,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             if (!it) {
                 sendSettingsToServer()
             } else {
-                adminVerification()
+                if (isTodaySettings())
+                    sendSettingsToServer()
+                else
+                    adminVerification()
             }
         }
     }

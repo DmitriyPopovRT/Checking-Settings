@@ -9,6 +9,8 @@ import jcifs.smb1.smb1.SmbFileInputStream
 import jcifs.smb1.smb1.SmbFileOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.popov.checkingsettings.R
+import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter.ValueAndCalibration
 import ru.popov.checkingsettings.utils.JsonSettings
 import ru.popov.checkingsettings.utils.LoginInformation
 import ru.popov.checkingsettings.utils.Utils
@@ -29,6 +31,8 @@ class Repository(
         return withContext(Dispatchers.Default) {
             val moshi = Moshi.Builder()
                 .add(CheckingSettingsCustomAdapter())
+//                .add(CheckingSettingsCustomAdapter.ColorAdapter2())
+//                .add(CheckingSettingsCustomAdapter.ColorAdapter())
                 .build()
 
             val adapter =
@@ -114,48 +118,48 @@ class Repository(
 
     // Собираем строку Сборка
     fun convertAssemblyResultToJson(
-        wp11AssemblyEB: String?,
-        wp12AssemblyEB: String?,
-        wp13AssemblyEB: String?,
-        wp14AssemblyEB: String?,
-        wp15AssemblyEB: String?,
-        wp16AssemblyEB: String?,
-        wp17AssemblyEB: String?,
-        wp18AssemblyEB: String?,
+        wp11AssemblyEB: ValueAndCalibration?,
+        wp12AssemblyEB: ValueAndCalibration?,
+        wp13AssemblyEB: ValueAndCalibration?,
+        wp14AssemblyEB: ValueAndCalibration?,
+        wp15AssemblyEB: ValueAndCalibration?,
+        wp16AssemblyEB: ValueAndCalibration?,
+        wp17AssemblyEB: ValueAndCalibration?,
+        wp18AssemblyEB: ValueAndCalibration?,
         textNoteAssemblyEB: String?,
-        wp11AssemblyBip: String?,
-        wp12AssemblyBip: String?,
-        wp13AssemblyBip: String?,
-        wp14AssemblyBip: String?,
-        wp15AssemblyBip: String?,
-        wp16AssemblyBip: String?,
-        wp17AssemblyBip: String?,
-        wp18AssemblyBip: String?,
+        wp11AssemblyBip: ValueAndCalibration?,
+        wp12AssemblyBip: ValueAndCalibration?,
+        wp13AssemblyBip: ValueAndCalibration?,
+        wp14AssemblyBip: ValueAndCalibration?,
+        wp15AssemblyBip: ValueAndCalibration?,
+        wp16AssemblyBip: ValueAndCalibration?,
+        wp17AssemblyBip: ValueAndCalibration?,
+        wp18AssemblyBip: ValueAndCalibration?,
         textNoteAssemblyBip: String?,
-        wp11AssemblySpeaker: String?,
-        wp12AssemblySpeaker: String?,
-        wp13AssemblySpeaker: String?,
-        wp14AssemblySpeaker: String?,
-        wp15AssemblySpeaker: String?,
-        wp16AssemblySpeaker: String?,
-        wp17AssemblySpeaker: String?,
-        wp18AssemblySpeaker: String?,
+        wp11AssemblySpeaker: ValueAndCalibration?,
+        wp12AssemblySpeaker: ValueAndCalibration?,
+        wp13AssemblySpeaker: ValueAndCalibration?,
+        wp14AssemblySpeaker: ValueAndCalibration?,
+        wp15AssemblySpeaker: ValueAndCalibration?,
+        wp16AssemblySpeaker: ValueAndCalibration?,
+        wp17AssemblySpeaker: ValueAndCalibration?,
+        wp18AssemblySpeaker: ValueAndCalibration?,
         textNoteAssemblySpeaker: String?,
-        wp11AssemblySolderingTemperature: String?,
-        wp12AssemblySolderingTemperature: String?,
-        wp13AssemblySolderingTemperature: String?,
-        wp14AssemblySolderingTemperature: String?,
-        wp15AssemblySolderingTemperature: String?,
-        wp16AssemblySolderingTemperature: String?,
-        wp17AssemblySolderingTemperature: String?,
-        wp18AssemblySolderingTemperature: String?,
+        wp11AssemblySolderingTemperature: ValueAndCalibration?,
+        wp12AssemblySolderingTemperature: ValueAndCalibration?,
+        wp13AssemblySolderingTemperature: ValueAndCalibration?,
+        wp14AssemblySolderingTemperature: ValueAndCalibration?,
+        wp15AssemblySolderingTemperature: ValueAndCalibration?,
+        wp16AssemblySolderingTemperature: ValueAndCalibration?,
+        wp17AssemblySolderingTemperature: ValueAndCalibration?,
+        wp18AssemblySolderingTemperature: ValueAndCalibration?,
         textNoteAssemblySolderingTemperature: String?,
-        wp23AssemblyFixing: String?,
-        wp24AssemblyFixing: String?,
-        wp25AssemblyFixing: String?,
-        wp26AssemblyFixing: String?,
-        wp27AssemblyFixing: String?,
-        wp28AssemblyFixing: String?,
+        wp23AssemblyFixing: ValueAndCalibration?,
+        wp24AssemblyFixing: ValueAndCalibration?,
+        wp25AssemblyFixing: ValueAndCalibration?,
+        wp26AssemblyFixing: ValueAndCalibration?,
+        wp27AssemblyFixing: ValueAndCalibration?,
+        wp28AssemblyFixing: ValueAndCalibration?,
         textNoteAssemblyFixing: String?
     ) {
         JsonSettings.assemblyJson = CheckingSettingsCustomAdapter.AssemblyWrapper(
@@ -352,30 +356,313 @@ class Repository(
 
     // Загружаем с сервера строку json по выбранной дате
     suspend fun downloadFileToServer(year: String, month: String, day: String): String {
-        return withContext(Dispatchers.Default) {
-            if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) ""
+//        return withContext(Dispatchers.Default) {
+        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) ""
 
-            // Создаем объект для аутентификации на шаре
-            val auth = NtlmPasswordAuthentication(
-                "", LoginInformation.USER, LoginInformation.PASS
-            )
-            val path = LoginInformation.PATH
+        // Создаем объект для аутентификации на шаре
+        val auth = NtlmPasswordAuthentication(
+            "", LoginInformation.USER, LoginInformation.PASS
+        )
+        val path = LoginInformation.PATH
 
-            // Ресолвим путь назначения в SmbFile
-            val baseDir = SmbFile(
-                "$path/$year/$month/$day/${LoginInformation.NAME_FILE}",
-                auth
-            )
+        // Ресолвим путь назначения в SmbFile
+        val baseDir = SmbFile(
+            "$path/$year/$month/$day/${LoginInformation.NAME_FILE}",
+            auth
+        )
 
-            val destFileName = SmbFileInputStream(baseDir)
+        val destFileName = SmbFileInputStream(baseDir)
 
-            var stringJsonSettings = ""
-            destFileName.bufferedReader().use {
-                stringJsonSettings = it.readText()
-                Timber.d("str = $stringJsonSettings")
+        var stringJsonSettings = ""
+        destFileName.bufferedReader().use {
+            stringJsonSettings = it.readText()
+//            Timber.d("str = $stringJsonSettings")
+        }
+
+        return stringJsonSettings
+//        }
+    }
+
+    private fun stringJsonToCustomAdapter(strJson: String): CheckingSettingsCustomAdapter.CustomCheckingSettings? {
+        val moshi = Moshi.Builder()
+            .add(CheckingSettingsCustomAdapter())
+//            .add(CheckingSettingsCustomAdapter.ColorAdapter2())
+//            .add(CheckingSettingsCustomAdapter.ColorAdapter())
+            .build()
+
+        val adapter =
+            moshi.adapter(CheckingSettingsCustomAdapter.CustomCheckingSettings::class.java)
+                .nonNull()
+
+//        return try {
+        return adapter.fromJson(strJson)
+        //            Timber.d("parse t = $t")
+//        } catch (e: Exception) {
+//            Timber.d("parse error = ${e.message}")
+//            null
+//        }
+    }
+
+    suspend fun download(
+        year: String,
+        month: String,
+        day: String
+    ): CheckingSettingsCustomAdapter.CustomCheckingSettings? {
+        return withContext(Dispatchers.IO) {
+            var strJson = ""
+//            Timber.d("$day isExistFile = ${isExistFile(year, month, day)}")
+            if (isExistFile(year, month, day)) {
+                strJson = downloadFileToServer(year, month, day)
             }
 
-            stringJsonSettings
+//            Timber.d("$day strJson = ${strJson}")
+            if (strJson.isNotEmpty()) {
+
+//                Timber.e("$day Adapter = ${stringJsonToCustomAdapter(strJson)}")
+                stringJsonToCustomAdapter(strJson)
+            } else
+                null
+        }
+    }
+
+    suspend fun downloadStatistics(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String,
+        workPlace: String
+    ): HashMap<Date, ValueAndCalibration> {
+        return withContext(Dispatchers.IO) {
+            val list = hashMapOf<Date, ValueAndCalibration>()
+            val adapterAssembly =
+                download(year.toString(), month.toString(), day.toString())?.assembly
+
+            val currentDate = GregorianCalendar(year, month - 1, day).time
+            val listAssembly = hashMapOf<Date, CheckingSettingsCustomAdapter.AssemblyWrapper?>()
+
+            listAssembly.put(currentDate, adapterAssembly)
+            listAssembly.values.forEach { assemblyWrapper ->
+                when (operation) {
+                    context.resources.getString(R.string.assembly_eb) -> {
+                        val assemblyEB = assemblyWrapper?.assemblyEB
+                        when (workPlace) {
+                            "1.1" -> {
+                                assemblyEB?.wp11?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.2" -> {
+                                assemblyEB?.wp12?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.3" -> {
+                                assemblyEB?.wp13?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.4" -> {
+                                assemblyEB?.wp14?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.5" -> {
+                                assemblyEB?.wp15?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.6" -> {
+                                assemblyEB?.wp16?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.7" -> {
+                                assemblyEB?.wp17?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.8" -> {
+                                assemblyEB?.wp18?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                        }
+                    }
+                    context.resources.getString(R.string.assembly_bip) -> {
+                        val assemblyBIP = assemblyWrapper?.assemblyBIP
+                        when (workPlace) {
+                            "1.1" -> {
+                                assemblyBIP?.wp11?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.2" -> {
+                                assemblyBIP?.wp12?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.3" -> {
+                                assemblyBIP?.wp13?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.4" -> {
+                                assemblyBIP?.wp14?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.5" -> {
+                                assemblyBIP?.wp15?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.6" -> {
+                                assemblyBIP?.wp16?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.7" -> {
+                                assemblyBIP?.wp17?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.8" -> {
+                                assemblyBIP?.wp18?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                        }
+                    }
+                    context.resources.getString(R.string.assembly_speaker) -> {
+                        val assemblySpeaker = assemblyWrapper?.assemblySpeaker
+                        when (workPlace) {
+                            "1.1" -> {
+                                assemblySpeaker?.wp11?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.2" -> {
+                                assemblySpeaker?.wp12?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.3" -> {
+                                assemblySpeaker?.wp13?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.4" -> {
+                                assemblySpeaker?.wp14?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.5" -> {
+                                assemblySpeaker?.wp15?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.6" -> {
+                                assemblySpeaker?.wp16?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.7" -> {
+                                assemblySpeaker?.wp17?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.8" -> {
+                                assemblySpeaker?.wp18?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                        }
+                    }
+                    context.resources.getString(R.string.assembly_temp) -> {
+                        val solderingTemperature = assemblyWrapper?.solderingTemperature
+                        when (workPlace) {
+                            "1.1" -> {
+                                solderingTemperature?.wp11?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.2" -> {
+                                solderingTemperature?.wp12?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.3" -> {
+                                solderingTemperature?.wp13?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.4" -> {
+                                solderingTemperature?.wp14?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.5" -> {
+                                solderingTemperature?.wp15?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.6" -> {
+                                solderingTemperature?.wp16?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.7" -> {
+                                solderingTemperature?.wp17?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "1.8" -> {
+                                solderingTemperature?.wp18?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                        }
+                    }
+                    context.resources.getString(R.string.assembly_fixation) -> {
+                        val assemblyFixing = assemblyWrapper?.assemblyFixing
+                        when (workPlace) {
+                            "2.3" -> {
+                                assemblyFixing?.wp23?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "2.4" -> {
+                                assemblyFixing?.wp24?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "2.5" -> {
+                                assemblyFixing?.wp25?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "2.6" -> {
+                                assemblyFixing?.wp26?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "2.7" -> {
+                                assemblyFixing?.wp27?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                            "2.8" -> {
+                                assemblyFixing?.wp28?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+//            Timber.d("$day list = ${list}")
+            return@withContext list
         }
     }
 

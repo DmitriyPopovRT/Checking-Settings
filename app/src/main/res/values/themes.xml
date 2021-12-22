@@ -14,4 +14,29 @@
         <!-- Customize your theme here. -->
         <item name="actionMenuTextColor">@color/white</item>
     </style>
+
+    // Спиннер
+    <style name="Widget.App.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <!--        <item name="hintTextColor">?attr/colorOnSurface</item>-->
+        <!--        <item name="endIconTint">?attr/colorOnSurface</item>-->
+        <item name="endIconDrawable">@drawable/ic_vector_spinner</item>
+        <!--        <item name="android:popupMenuStyle">@color/white</item>-->
+        <item name="mock_showLabel">false</item>
+        <!--        <item name="android:textColor">@color/purple_200</item>-->
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
+        </item>
+    </style>
+    // Закругляем рамку в TextInputLayout для EditText
+    <style name="OutlinedRoundedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
+        </item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="errorEnabled">true</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 </resources>

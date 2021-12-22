@@ -2,6 +2,7 @@ package ru.popov.checkingsettings.data
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonQualifier
 import com.squareup.moshi.ToJson
 
 class CheckingSettingsCustomAdapter {
@@ -79,66 +80,96 @@ class CheckingSettingsCustomAdapter {
     )
 
     /* Assembly */
+    class ColorAdapter {
+        @ToJson
+        fun toJson(rgb: ValueAndCalibration): ValueAndCalibration {
+            return rgb
+        }
+
+        @FromJson
+        fun fromJson(rgb: String): ValueAndCalibration {
+            return ValueAndCalibration(rgb, false)
+        }
+    }
+
     @JsonClass(generateAdapter = true)
-    data class AssemblyEB(
-        val wp11: String?,
-        val wp12: String?,
-        val wp13: String?,
-        val wp14: String?,
-        val wp15: String?,
-        val wp16: String?,
-        val wp17: String?,
-        val wp18: String?,
-        val note: String?
+    data class ValueAndCalibration(
+        val value: String?,
+        val isCalibration: Boolean? = false
     )
 
     @JsonClass(generateAdapter = true)
+    data class AssemblyEB(
+        val wp11: ValueAndCalibration?,
+        val wp12: ValueAndCalibration?,
+        val wp13: ValueAndCalibration?,
+        val wp14: ValueAndCalibration?,
+        val wp15: ValueAndCalibration?,
+        val wp16: ValueAndCalibration?,
+        val wp17: ValueAndCalibration?,
+        val wp18: ValueAndCalibration?,
+        val note: String?
+    )
+//    @JsonClass(generateAdapter = true)
+//    data class AssemblyEB(
+//        val wp11: String?,
+//        val wp12: String?,
+//        val wp13: String?,
+//        val wp14: String?,
+//        val wp15: String?,
+//        val wp16: String?,
+//        val wp17: String?,
+//        val wp18: String?,
+//        val note: String?
+//    )
+
+    @JsonClass(generateAdapter = true)
     data class AssemblyBIP(
-        val wp11: String?,
-        val wp12: String?,
-        val wp13: String?,
-        val wp14: String?,
-        val wp15: String?,
-        val wp16: String?,
-        val wp17: String?,
-        val wp18: String?,
+        val wp11: ValueAndCalibration?,
+        val wp12: ValueAndCalibration?,
+        val wp13: ValueAndCalibration?,
+        val wp14: ValueAndCalibration?,
+        val wp15: ValueAndCalibration?,
+        val wp16: ValueAndCalibration?,
+        val wp17: ValueAndCalibration?,
+        val wp18: ValueAndCalibration?,
         val note: String?
     )
 
     @JsonClass(generateAdapter = true)
     data class AssemblySpeaker(
-        val wp11: String?,
-        val wp12: String?,
-        val wp13: String?,
-        val wp14: String?,
-        val wp15: String?,
-        val wp16: String?,
-        val wp17: String?,
-        val wp18: String?,
+        val wp11: ValueAndCalibration?,
+        val wp12: ValueAndCalibration?,
+        val wp13: ValueAndCalibration?,
+        val wp14: ValueAndCalibration?,
+        val wp15: ValueAndCalibration?,
+        val wp16: ValueAndCalibration?,
+        val wp17: ValueAndCalibration?,
+        val wp18: ValueAndCalibration?,
         val note: String?
     )
 
     @JsonClass(generateAdapter = true)
     data class SolderingTemperature(
-        val wp11: String?,
-        val wp12: String?,
-        val wp13: String?,
-        val wp14: String?,
-        val wp15: String?,
-        val wp16: String?,
-        val wp17: String?,
-        val wp18: String?,
+        val wp11: ValueAndCalibration?,
+        val wp12: ValueAndCalibration?,
+        val wp13: ValueAndCalibration?,
+        val wp14: ValueAndCalibration?,
+        val wp15: ValueAndCalibration?,
+        val wp16: ValueAndCalibration?,
+        val wp17: ValueAndCalibration?,
+        val wp18: ValueAndCalibration?,
         val note: String?
     )
 
     @JsonClass(generateAdapter = true)
     data class AssemblyFixing(
-        val wp23: String?,
-        val wp24: String?,
-        val wp25: String?,
-        val wp26: String?,
-        val wp27: String?,
-        val wp28: String?,
+        val wp23: ValueAndCalibration?,
+        val wp24: ValueAndCalibration?,
+        val wp25: ValueAndCalibration?,
+        val wp26: ValueAndCalibration?,
+        val wp27: ValueAndCalibration?,
+        val wp28: ValueAndCalibration?,
         val note: String?
     )
 
