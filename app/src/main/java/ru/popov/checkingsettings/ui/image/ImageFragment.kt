@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.popov.checkingsettings.R
+import ru.popov.checkingsettings.data.Image
 import ru.popov.checkingsettings.databinding.FragmentImageBinding
 import ru.popov.checkingsettings.ui.home.HomeViewModel
 import ru.popov.checkingsettings.utils.Utils
@@ -44,14 +45,18 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<Array<String>>
 
+    private var listImagesSave: List<Image>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
         // Запрашиваем разрешения на доступ к камере и файловой системе
         initPermissionResultListener()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
         // Получаем аргументы из предыдущего фрагмента
         dateFromHomeFragment = arguments?.let { ImageFragmentArgs.fromBundle(it) }?.date.toString()
 
@@ -77,7 +82,13 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.updatePermissionState(hasPermission(), dateFromHomeFragment)
+        Timber.d("onResume")
+        if (listImagesSave != null) {
+            imagesAdapter.items = listImagesSave
+            if (listImagesSave!!.isEmpty()) binding.listEmpty.visibility = View.VISIBLE
+            else binding.listEmpty.visibility = View.GONE
+        } else
+            viewModel.updatePermissionState(hasPermission(), dateFromHomeFragment)
     }
 
     @Throws(IOException::class)
@@ -143,6 +154,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
                 }
                 imagesAdapter.notifyDataSetChanged()
             }
+
             else -> {
                 toast("Wrong request code")
             }
@@ -173,6 +185,7 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
 
     private fun bindViewModel() {
         viewModel.imagesLiveData.observe(viewLifecycleOwner) {
+            listImagesSave = it
             imagesAdapter.items = it
             if (it.isEmpty()) binding.listEmpty.visibility = View.VISIBLE
             else binding.listEmpty.visibility = View.GONE
@@ -198,6 +211,12 @@ class ImageFragment : Fragment(R.layout.fragment_image) {
     override fun onDestroyView() {
         super.onDestroyView()
         Timber.d("onDestroyView")
+//        viewModel.deleteAllFilesFolder()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("onDestroy")
         viewModel.deleteAllFilesFolder()
     }
 

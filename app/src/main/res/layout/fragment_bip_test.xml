@@ -1,0 +1,198 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSpeakerTest"
+        android:layout_width="700dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black">
+
+            <TextView
+                android:id="@+id/titleSpeakerTest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_300"
+                android:gravity="center"
+                android:text="Проверка БИП"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/titleLowFrequencySignalGenerator"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:background="@color/white"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text=""-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textStyle="bold"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/workplaceBipTest17"-->
+            <!--                app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceSpeakerTest"-->
+            <!--                app:layout_constraintHorizontal_bias="0.5"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/titleSpeakerTest" />-->
+
+            <TextView
+                android:id="@+id/noteLowFrequencySignalGenerator"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Примечание:"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/workplaceBipTest17"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleWorkPlaceSpeakerTest"
+                app:layout_constraintTop_toTopOf="@+id/titleWorkPlaceSpeakerTest" />
+
+            <TextView
+                android:id="@+id/titleWorkPlaceSpeakerTest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Номер рабочего места"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/workplaceBipTest17"
+                app:layout_constraintEnd_toStartOf="@+id/noteLowFrequencySignalGenerator"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleSettingSuccess"
+                app:layout_constraintTop_toBottomOf="@+id/titleSpeakerTest" />
+
+            <TextView
+                android:id="@+id/workplaceBipTest17"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="П1-17"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplaceBipTest18"
+                app:layout_constraintStart_toEndOf="@+id/titleSettingSuccess"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceSpeakerTest" />
+
+            <TextView
+                android:id="@+id/workplaceBipTest18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="П1-18"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteLowFrequencySignalGenerator"
+                app:layout_constraintStart_toEndOf="@+id/workplaceBipTest17"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceSpeakerTest" />
+            <!--  -->
+            <TextView
+                android:id="@+id/titleSettingSuccess"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:text="Золотой образец прошел проверку"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceSpeakerTest"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleSpeakerTest" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk17"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose17"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceBipTest17"
+                app:layout_constraintStart_toStartOf="@+id/workplaceBipTest17"
+                app:layout_constraintTop_toBottomOf="@+id/workplaceBipTest17" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose17"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSettingSuccess"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOk17"
+                app:layout_constraintStart_toStartOf="@+id/buttonOk17"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk17" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk18"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose18"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceBipTest18"
+                app:layout_constraintStart_toStartOf="@+id/workplaceBipTest18"
+                app:layout_constraintTop_toBottomOf="@+id/workplaceBipTest18" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose18"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSettingSuccess"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOk18"
+                app:layout_constraintStart_toStartOf="@+id/buttonOk18"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk18" />
+
+            <EditText
+                android:id="@+id/editTextModBip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteLowFrequencySignalGenerator"
+                app:layout_constraintTop_toBottomOf="@+id/noteLowFrequencySignalGenerator" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

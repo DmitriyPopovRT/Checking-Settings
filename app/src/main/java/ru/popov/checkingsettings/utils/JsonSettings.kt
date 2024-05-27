@@ -8,4 +8,8 @@ object JsonSettings {
     var assemblyAndLabelJson: CheckingSettingsCustomAdapter.AssemblyAndLabelWrapper? = null
     var assemblyJson: CheckingSettingsCustomAdapter.AssemblyWrapper? = null
     var speakerTestJson: CheckingSettingsCustomAdapter.SpeakerTestWrapper? = null
+    var bipTestJson: CheckingSettingsCustomAdapter.BipTestWrapper? = null
+    var testConnectorJson: CheckingSettingsCustomAdapter.TestConnectorWrapper? = null
+    var outageJson: CheckingSettingsCustomAdapter.OutageWrapper? = null
+    var exitDeviceJson: CheckingSettingsCustomAdapter.ExitDeviceWrapper? = null
 }

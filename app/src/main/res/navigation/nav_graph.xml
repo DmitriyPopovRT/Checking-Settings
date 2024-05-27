@@ -31,7 +31,8 @@
         <action
             android:id="@+id/action_imagesFragment_to_imageFullscreenFragment"
             app:destination="@id/imageFullscreenFragment"
-            app:popUpTo="@id/imagesFragment" />
+            app:popUpTo="@id/imagesFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/imageFullscreenFragment"

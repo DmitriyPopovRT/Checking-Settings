@@ -2,7 +2,6 @@ package ru.popov.checkingsettings.data
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.JsonQualifier
 import com.squareup.moshi.ToJson
 
 class CheckingSettingsCustomAdapter {
@@ -24,6 +23,10 @@ class CheckingSettingsCustomAdapter {
         val assemblyAndLabel: AssemblyAndLabelWrapper?,
         val assembly: AssemblyWrapper?,
         val speakerTest: SpeakerTestWrapper?,
+        val bipTest: BipTestWrapper?,
+        val testConnectorWrapper: TestConnectorWrapper?,
+        val outageWrapper: OutageWrapper?,
+        val exitDeviceWrapper: ExitDeviceWrapper?
     )
 
     /* Packaged */
@@ -70,7 +73,10 @@ class CheckingSettingsCustomAdapter {
     /* AssemblyAndLabel */
     @JsonClass(generateAdapter = true)
     data class ScanningLabelNumberNotFound(
-        val wp28: Boolean?,
+        val wp33: Boolean?,
+        val wp34: Boolean?,
+        val wp36: Boolean?,
+        val wp37: Boolean?,
         val note: String?
     )
 
@@ -100,28 +106,12 @@ class CheckingSettingsCustomAdapter {
 
     @JsonClass(generateAdapter = true)
     data class AssemblyEB(
-        val wp11: ValueAndCalibration?,
-        val wp12: ValueAndCalibration?,
-        val wp13: ValueAndCalibration?,
-        val wp14: ValueAndCalibration?,
-        val wp15: ValueAndCalibration?,
-        val wp16: ValueAndCalibration?,
-        val wp17: ValueAndCalibration?,
-        val wp18: ValueAndCalibration?,
+        val wp07: ValueAndCalibration?,
+        val wp08: ValueAndCalibration?,
+        val wp09: ValueAndCalibration?,
+        val wp10: ValueAndCalibration?,
         val note: String?
     )
-//    @JsonClass(generateAdapter = true)
-//    data class AssemblyEB(
-//        val wp11: String?,
-//        val wp12: String?,
-//        val wp13: String?,
-//        val wp14: String?,
-//        val wp15: String?,
-//        val wp16: String?,
-//        val wp17: String?,
-//        val wp18: String?,
-//        val note: String?
-//    )
 
     @JsonClass(generateAdapter = true)
     data class AssemblyBIP(
@@ -131,45 +121,22 @@ class CheckingSettingsCustomAdapter {
         val wp14: ValueAndCalibration?,
         val wp15: ValueAndCalibration?,
         val wp16: ValueAndCalibration?,
-        val wp17: ValueAndCalibration?,
-        val wp18: ValueAndCalibration?,
-        val note: String?
-    )
-
-    @JsonClass(generateAdapter = true)
-    data class AssemblySpeaker(
-        val wp11: ValueAndCalibration?,
-        val wp12: ValueAndCalibration?,
-        val wp13: ValueAndCalibration?,
-        val wp14: ValueAndCalibration?,
-        val wp15: ValueAndCalibration?,
-        val wp16: ValueAndCalibration?,
-        val wp17: ValueAndCalibration?,
-        val wp18: ValueAndCalibration?,
         val note: String?
     )
 
     @JsonClass(generateAdapter = true)
     data class SolderingTemperature(
-        val wp11: ValueAndCalibration?,
-        val wp12: ValueAndCalibration?,
-        val wp13: ValueAndCalibration?,
-        val wp14: ValueAndCalibration?,
-        val wp15: ValueAndCalibration?,
-        val wp16: ValueAndCalibration?,
-        val wp17: ValueAndCalibration?,
-        val wp18: ValueAndCalibration?,
-        val note: String?
-    )
-
-    @JsonClass(generateAdapter = true)
-    data class AssemblyFixing(
+        val wp01: ValueAndCalibration?,
+        val wp02: ValueAndCalibration?,
+        val wp03: ValueAndCalibration?,
+        val wp04: ValueAndCalibration?,
+        val wp05: ValueAndCalibration?,
+        val wp19: ValueAndCalibration?,
+        val wp20: ValueAndCalibration?,
+        val wp21: ValueAndCalibration?,
+        val wp22: ValueAndCalibration?,
         val wp23: ValueAndCalibration?,
         val wp24: ValueAndCalibration?,
-        val wp25: ValueAndCalibration?,
-        val wp26: ValueAndCalibration?,
-        val wp27: ValueAndCalibration?,
-        val wp28: ValueAndCalibration?,
         val note: String?
     )
 
@@ -177,20 +144,71 @@ class CheckingSettingsCustomAdapter {
     data class AssemblyWrapper(
         val assemblyEB: AssemblyEB,
         val assemblyBIP: AssemblyBIP,
-        val assemblySpeaker: AssemblySpeaker,
-        val solderingTemperature: SolderingTemperature,
-        val assemblyFixing: AssemblyFixing?
+        val solderingTemperature: SolderingTemperature
     )
 
     /* Speaker Test */
     @JsonClass(generateAdapter = true)
     data class CheckSoundSignalWhenSpeakerConnected(
-        val wp111: Boolean?,
-        val note: String?
+        val wp25: Boolean?,
+        val wp26: Boolean?,
+        val wpGold25: Boolean?,
+        val wpGold26: Boolean?,
+        val note: String?,
+        val noteGold: String?
     )
 
     @JsonClass(generateAdapter = true)
     data class SpeakerTestWrapper(
         val checkSoundSignalWhenSpeakerConnected: CheckSoundSignalWhenSpeakerConnected,
+    )
+
+    /* Bip Test */
+    @JsonClass(generateAdapter = true)
+    data class GoldBipTest(
+        val wp17: Boolean?,
+        val wp18: Boolean?,
+        val note: String?,
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class BipTestWrapper(
+        val goldTest: GoldBipTest,
+    )
+
+    /* TestConnector */
+    @JsonClass(generateAdapter = true)
+    data class CheckingGold(
+        val wp35: Boolean?,
+        val note: String?
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class TestConnectorWrapper(
+        val checkingGold: CheckingGold
+    )
+
+    /* Outage */
+    @JsonClass(generateAdapter = true)
+    data class CheckingOutage(
+        val outage: Boolean?,
+        val note: String?
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class OutageWrapper(
+        val checkingOutage: CheckingOutage
+    )
+
+    /* ExitDevice */
+    @JsonClass(generateAdapter = true)
+    data class ExitDevice(
+        val exitDevice: Boolean?,
+        val noteExitDevice: String?
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class ExitDeviceWrapper(
+        val exitDevice: ExitDevice
     )
 }

@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardAssembly"
+        android:layout_width="1000dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black">
+
+            <TextView
+                android:id="@+id/titleCardAssembly"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_300"
+                android:gravity="center"
+                android:text="Сборка"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/titleScrewdriver"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Винтоверт (Момент затяжки в зависимости \nот выполняемого процесса)"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/workplace1.2"
+                app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceAssembly"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleCardAssembly" />
+
+            <TextView
+                android:id="@+id/titleWorkPlaceAssembly"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Номер рабочего места"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteAssembly"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintTop_toBottomOf="@+id/titleCardAssembly" />
+
+            <TextView
+                android:id="@+id/noteAssembly"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Примечание:"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/workplace1.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleWorkPlaceAssembly"
+                app:layout_constraintTop_toTopOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.1"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.2"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.1"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.3"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.4"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.2"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.4"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.3"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.5"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.4"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.6"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.7"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.5"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.7"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplace1.8"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.6"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <TextView
+                android:id="@+id/workplace1.8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="1.8"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteAssembly"
+                app:layout_constraintStart_toEndOf="@+id/workplace1.7"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssembly" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleModEB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Сборка ЭБ \n2,5 ± 0, кг*см"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleScrewdriver" />
+
+            <EditText
+                android:id="@+id/editEB1.1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.1"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.1"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.1" />
+
+            <EditText
+                android:id="@+id/editEB1.2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.2"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.2" />
+
+            <EditText
+                android:id="@+id/editEB1.3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.3"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.3" />
+
+            <EditText
+                android:id="@+id/editEB1.4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.4"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.4" />
+
+            <EditText
+                android:id="@+id/editEB1.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.5"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.5" />
+
+            <EditText
+                android:id="@+id/editEB1.6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.6"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.6" />
+
+            <EditText
+                android:id="@+id/editEB1.7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.7"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.7" />
+
+            <EditText
+                android:id="@+id/editEB1.8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleModEB"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.8"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.8"
+                app:layout_constraintTop_toBottomOf="@+id/workplace1.8" />
+
+            <EditText
+                android:id="@+id/editTextModEB"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/editEB1.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteAssembly"
+                app:layout_constraintTop_toBottomOf="@+id/noteAssembly" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleBip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Сборка БИП \n1,0 ± 0,2 кг*см"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleModEB" />
+
+            <EditText
+                android:id="@+id/editBip1.1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.1"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.1"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.2"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.3"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.4"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.5"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.6"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.7"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editBip1.8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleBip"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.8"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.8"
+                app:layout_constraintTop_toTopOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editTextModBip"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/editBip1.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteAssembly"
+                app:layout_constraintTop_toTopOf="@+id/editBip1.8" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleSpeaker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Сборка динамика \n2,2 ± 0,3 кг*см"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleBip" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.1"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.1"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.2"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.3"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.4"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.5"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.6"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.7"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editSpeaker1.8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSpeaker"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.8"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.8"
+                app:layout_constraintTop_toTopOf="@+id/titleSpeaker" />
+
+            <EditText
+                android:id="@+id/editTextModSpeaker"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/editSpeaker1.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteAssembly"
+                app:layout_constraintTop_toTopOf="@+id/editSpeaker1.8" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleSolderingStation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Паяльная станция"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleSpeaker" />
+
+            <TextView
+                android:id="@+id/textSolderingStation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingStation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.1"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingStation" />
+
+            <!---->
+            <TextView
+                android:id="@+id/titleSolderingTemperature"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Температура пайки \n350-440 С"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/titleScrewdriver"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleSolderingStation" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.1"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.1"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.2"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.2"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.3"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.3"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.4"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.4"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.5"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.5"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.6"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.6"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.7"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.7"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <EditText
+                android:id="@+id/editSolderingTemperature1.8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSolderingTemperature"
+                app:layout_constraintEnd_toEndOf="@+id/workplace1.8"
+                app:layout_constraintStart_toStartOf="@+id/workplace1.8"
+                app:layout_constraintTop_toTopOf="@+id/titleSolderingTemperature" />
+
+            <!---->
+            <EditText
+                android:id="@+id/editTextModSolderingTemperature"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/editSolderingTemperature1.8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/noteAssembly"
+                app:layout_constraintTop_toTopOf="@+id/editSolderingTemperature1.8"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/titleFixing"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="Фиксация верхней крышки \n3,0 ± 0,5 кг*см"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceAssemblyFixing"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleSolderingTemperature" />
+
+            <TextView
+                android:id="@+id/titleWorkPlaceAssemblyFixing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="Номер рабочего места"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/noteAssemblyFixing"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing"
+                app:layout_constraintTop_toTopOf="@+id/titleFixing" />
+
+            <EditText
+                android:id="@+id/noteAssemblyFixing"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/titleWorkPlaceAssemblyFixing"
+                app:layout_constraintTop_toBottomOf="@+id/editTextModSolderingTemperature" />
+
+            <TextView
+                android:id="@+id/titleFixing2.3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.3"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.3"
+                app:layout_constraintEnd_toStartOf="@+id/titleFixing2.4"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <TextView
+                android:id="@+id/titleFixing2.4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.4"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.4"
+                app:layout_constraintEnd_toStartOf="@+id/titleFixing2.5"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing2.3"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <TextView
+                android:id="@+id/titleFixing2.5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.5"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.5"
+                app:layout_constraintEnd_toStartOf="@+id/titleFixing2.6"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing2.4"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <TextView
+                android:id="@+id/titleFixing2.6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.6"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.6"
+                app:layout_constraintEnd_toStartOf="@+id/titleFixing2.7"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing2.5"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <TextView
+                android:id="@+id/titleFixing2.7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.7"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.7"
+                app:layout_constraintEnd_toStartOf="@+id/titleFixing2.8"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing2.6"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <TextView
+                android:id="@+id/titleFixing2.8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="2.8"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/editFixing2.8"
+                app:layout_constraintEnd_toStartOf="@+id/noteAssemblyFixing"
+                app:layout_constraintStart_toEndOf="@+id/titleFixing2.7"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceAssemblyFixing" />
+
+            <EditText
+                android:id="@+id/editFixing2.3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.3"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.3"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.3" />
+
+            <EditText
+                android:id="@+id/editFixing2.4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.4"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.4"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.4" />
+
+            <EditText
+                android:id="@+id/editFixing2.5"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.5"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.5"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.5" />
+
+            <EditText
+                android:id="@+id/editFixing2.6"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.6"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.6"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.6" />
+
+            <EditText
+                android:id="@+id/editFixing2.7"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.7"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.7"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.7" />
+
+            <EditText
+                android:id="@+id/editFixing2.8"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/height_line_fixing"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="@+id/titleFixing"
+                app:layout_constraintEnd_toEndOf="@+id/titleFixing2.8"
+                app:layout_constraintStart_toStartOf="@+id/titleFixing2.8"
+                app:layout_constraintTop_toBottomOf="@+id/titleFixing2.8" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

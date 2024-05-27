@@ -2,11 +2,13 @@ package ru.popov.checkingsettings.ui.home
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -18,17 +20,32 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import ru.popov.checkingsettings.R
 import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter
 import ru.popov.checkingsettings.databinding.FragmentHomeBinding
-import ru.popov.checkingsettings.ui.*
+import ru.popov.checkingsettings.ui.AssemblyAndLabelFragment
+import ru.popov.checkingsettings.ui.AssemblyFragment
+import ru.popov.checkingsettings.ui.ExitDeviceFragment
+import ru.popov.checkingsettings.ui.OutageFragment
+import ru.popov.checkingsettings.ui.PackageFragment
+import ru.popov.checkingsettings.ui.ProgramTestFragment
+import ru.popov.checkingsettings.ui.SpeakerTestFragment
+import ru.popov.checkingsettings.ui.TestBipFragment
+import ru.popov.checkingsettings.ui.TestConnectorFragment
 import ru.popov.checkingsettings.utils.LoginInformation
+import ru.popov.checkingsettings.utils.SettingsParse
 import ru.popov.checkingsettings.utils.Utils.toast
 import timber.log.Timber
+import java.io.BufferedWriter
+import java.io.FileWriter
+import java.io.IOException
 import java.time.LocalDateTime
+
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -40,6 +57,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var assemblyAndLabelFragment: AssemblyAndLabelFragment? = null
     private var assemblyFragment: AssemblyFragment? = null
     private var speakerTestFragment: SpeakerTestFragment? = null
+    private var bipTestFragment: TestBipFragment? = null
+    private var testConnectorFragment: TestConnectorFragment? = null
+    private var outageFragment: OutageFragment? = null
+    private var exitDeviceFragment: ExitDeviceFragment? = null
 
     private var selectedDateAsPath = ""
 
@@ -48,8 +69,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var selectedMonth = currentDateTime.month.value
     private var selectedDay = currentDateTime.dayOfMonth
 
+    lateinit var settingsParse: SettingsParse
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.i("TAG", "onViewCreated")
+        // Парсим настройки подключения
+        settingsParse = SettingsParse(requireContext())
+        LoginInformation.PATH = settingsParse.path
+        LoginInformation.SERVERNAME = settingsParse.serverName
+        LoginInformation.SHARENAME = settingsParse.shareName
+        LoginInformation.USER = settingsParse.login
+        LoginInformation.PASS = settingsParse.password
+
         Timber.d("onViewCreated")
         // Получаем инстансы фрагментов
         getFragment()
@@ -72,6 +104,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 R.id.action_load_settings -> {
                     // Получаем дату которую выбрал пользователь
                     getDate()
+                    true
+                }
+                R.id.action_settings -> {
+                    // Вызываем метод отрисовки настроек
+                    getShowDialogSettings()
                     true
                 }
                 else -> {
@@ -101,6 +138,106 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 HomeFragmentDirections.actionHomeFragmentToStatisticsFragment()
             )
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i("TAG", "onSaveInstanceState")
+//        outState.putSerializable("list", myData as Serializable?)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i("TAG", "onCreateView")
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        Log.i("TAG", "onActivityCreated")
+//        if (savedInstanceState != null) {
+//            //probably orientation change
+//            myData = savedInstanceState.getSerializable("list") as List<String?>?
+//        } else {
+//            if (myData != null) {
+//                //returning from backstack, data is fine, do nothing
+//            } else {
+//                //newly created, compute data
+//                myData = computeData()
+//            }
+//        }
+    }
+
+    // Создаем окно с настройками
+    private fun getShowDialogSettings() {
+        val alertDialog = requireActivity().let {
+            val myBuilder = androidx.appcompat.app.AlertDialog.Builder(it)
+            // Парсим настройки при открытии диалога
+            settingsParse = SettingsParse(requireContext())
+            // Инфлэйтим вьюху
+            val view = requireActivity()
+                .layoutInflater
+                .inflate(R.layout.dialog_layout_setting, null)
+
+            val server = view.findViewById(R.id.editServerName) as EditText
+            val share = view.findViewById(R.id.editShareName) as EditText
+            val path = view.findViewById(R.id.editPathToFolder) as EditText
+            val user = view.findViewById(R.id.editDialogSettingUser) as EditText
+            val password = view.findViewById(R.id.editDialogSettingPassword) as EditText
+
+            // Заполняем поля из json
+            server.setText(settingsParse.serverName)
+            share.setText(settingsParse.shareName)
+            path.setText(settingsParse.path)
+            user.setText(settingsParse.login)
+            password.setText(settingsParse.password)
+
+            myBuilder
+                .setTitle(requireActivity().resources.getString(R.string.settings))
+                .setView(view)
+                .setPositiveButton(
+                    requireActivity()
+                        .resources
+                        .getString(R.string.ok)
+                ) { _, _ ->
+                    // В побочном потоке записываем настройки в файл
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            try {
+                                val currentPath =
+                                    activity?.applicationContext?.getFileStreamPath(
+                                        "settings.jsonc"
+                                    )?.path
+                                // открываем поток для записи
+                                val bw = BufferedWriter(FileWriter(currentPath))
+                                val settings = JSONObject()
+                                settings.put("serverName", server.text.toString())
+                                settings.put("shareName", share.text.toString())
+                                settings.put("path", path.text.toString())
+                                settings.put("user", user.text.toString())
+                                settings.put("password", password.text.toString())
+
+                                // пишем данные
+                                bw.write(settings.toString())
+                                // закрываем поток
+                                bw.close()
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                }
+                .setNegativeButton(
+                    requireActivity()
+                        .resources
+                        .getString(R.string.cancel)
+                ) { _, _ -> }
+                .create()
+        }
+        alertDialog.show()
     }
 
     override fun onResume() {
@@ -167,6 +304,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             childFragmentManager.findFragmentByTag("fragmentAssembly") as AssemblyFragment?
         speakerTestFragment =
             childFragmentManager.findFragmentByTag("fragmentSpeakerTest") as SpeakerTestFragment?
+        bipTestFragment =
+            childFragmentManager.findFragmentByTag("fragmentBipTest") as TestBipFragment?
+        testConnectorFragment =
+            childFragmentManager.findFragmentByTag("fragmentTestConnector") as TestConnectorFragment?
+        outageFragment =
+            childFragmentManager.findFragmentByTag("fragmentOutage") as OutageFragment?
+        exitDeviceFragment =
+            childFragmentManager.findFragmentByTag("fragmentExitDevice") as ExitDeviceFragment?
     }
 
     // Показываем/скрываем progressBar
@@ -189,7 +334,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             try {
                 setSettingsIsHistory(it)
             } catch (e: Exception) {
-                Timber.d("error = ${e.message}")
+                Timber.d("error1 = ${e.message}")
             }
         }
         viewModel.isError.observe(viewLifecycleOwner) {
@@ -210,7 +355,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
 
-            Timber.d("error = $it")
+            Timber.d("error2 = $it")
         }
         viewModel.isSending.observe(viewLifecycleOwner) {
             toast(R.string.data_send)
@@ -244,17 +389,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private suspend fun sendSettings() {
         packageFragment?.onClickSendServer()
         delay(500)
-
         programTestFragment?.onClickSendServer()
         delay(500)
-
         assemblyAndLabelFragment?.onClickSendServer()
         delay(500)
-
         assemblyFragment?.onClickSendServer()
         delay(500)
-
         speakerTestFragment?.onClickSendServer()
+        delay(500)
+        bipTestFragment?.onClickSendServer()
+        delay(500)
+        testConnectorFragment?.onClickSendServer()
+        delay(500)
+        outageFragment?.onClickSendServer()
+        delay(500)
+        exitDeviceFragment?.onClickSendServer()
         delay(500)
     }
 
@@ -298,6 +447,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             checkingSettings.speakerTest?.let {
                 speakerTestFragment?.setSettingsSpeakerTest(it)
             }
+            checkingSettings.bipTest?.let {
+                bipTestFragment?.setSettingsBipTest(it)
+            }
+            checkingSettings.testConnectorWrapper?.let {
+                testConnectorFragment?.setSettingsTestConnector(it)
+            }
+            checkingSettings.outageWrapper?.let {
+                outageFragment?.setSettingsOutage(it)
+            }
+            checkingSettings.exitDeviceWrapper?.let {
+                exitDeviceFragment?.setSettingsExitDevice(it)
+            }
         }
     }
 
@@ -308,6 +469,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         assemblyAndLabelFragment?.clearView()
         assemblyFragment?.clearView()
         speakerTestFragment?.clearView()
+        bipTestFragment?.clearView()
+        testConnectorFragment?.clearView()
+        outageFragment?.clearView()
+        exitDeviceFragment?.clearView()
     }
 
     private fun loadSettings() {

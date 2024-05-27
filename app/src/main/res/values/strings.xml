@@ -2,6 +2,7 @@
     <string name="app_name">Проверка настроек</string>
     <string name="result">Результат</string>
     <string name="packageText">Упаковка</string>
+    <string name="connectorText">Проверка соединителя</string>
     <string name="download_settings">Загрузка настроек</string>
     <string name="clear">Сброс</string>
     <string name="attach_photo">Прикрепить фото</string>
@@ -30,32 +31,68 @@
     <string name="assembly_speaker">Сборка динамиков</string>
     <string name="assembly_temp">Температура пайки</string>
     <string name="assembly_fixation">Фиксация верхней крышки</string>
+    <string name="settings">Настройки</string>
+    <string name="path_to_folder">Путь к папке</string>
+    <string name="serverName">serverName</string>
+    <string name="shareName">shareName</string>
+    <string name="dialog_setting_path_tint">Введите путь к папке</string>
+    <string name="dialog_setting_server_tint">Введите serverName</string>
+    <string name="dialog_setting_share_tint">Введите shareName</string>
+    <string name="dialog_setting_user">Логин</string>
+    <string name="dialog_setting_user_tint">Введите логин</string>
+    <string name="dialog_setting_password">Пароль</string>
+    <string name="dialog_setting_password_tint">Введите пароль</string>
+    <string name="outageText">Простой</string>
+    <string name="exitDevice">Выход оборудования из строя</string>
 
     <string-array name="spinner_operation">
         <item>@string/assembly_eb</item>
         <item>@string/assembly_bip</item>
-        <item>@string/assembly_speaker</item>
-        <item>@string/assembly_temp</item>
-        <item>@string/assembly_fixation</item>
+        <item>@string/outageText</item>
+        <item>@string/exitDevice</item>
     </string-array>
 
     <string-array name="spinner_workplace1">
-        <item>1.1</item>
-        <item>1.2</item>
-        <item>1.3</item>
-        <item>1.4</item>
-        <item>1.5</item>
-        <item>1.6</item>
-        <item>1.7</item>
-        <item>1.8</item>
+        <item>П1-07</item>
+        <item>П1-08</item>
+        <item>П1-09</item>
+        <item>П1-10</item>
     </string-array>
 
     <string-array name="spinner_workplace2">
-        <item>2.3</item>
-        <item>2.4</item>
-        <item>2.5</item>
-        <item>2.6</item>
-        <item>2.7</item>
-        <item>2.8</item>
+        <item>П1-11</item>
+        <item>П1-12</item>
+        <item>П1-13</item>
+        <item>П1-14</item>
+        <item>П1-15</item>
+        <item>П1-16</item>
     </string-array>
+
+<!--    <string-array name="spinner_operation">-->
+<!--        <item>@string/assembly_eb</item>-->
+<!--        <item>@string/assembly_bip</item>-->
+<!--        <item>@string/assembly_speaker</item>-->
+<!--        <item>@string/assembly_temp</item>-->
+<!--        <item>@string/assembly_fixation</item>-->
+<!--    </string-array>-->
+
+<!--    <string-array name="spinner_workplace1">-->
+<!--        <item>1.1</item>-->
+<!--        <item>1.2</item>-->
+<!--        <item>1.3</item>-->
+<!--        <item>1.4</item>-->
+<!--        <item>1.5</item>-->
+<!--        <item>1.6</item>-->
+<!--        <item>1.7</item>-->
+<!--        <item>1.8</item>-->
+<!--    </string-array>-->
+
+<!--    <string-array name="spinner_workplace2">-->
+<!--        <item>2.3</item>-->
+<!--        <item>2.4</item>-->
+<!--        <item>2.5</item>-->
+<!--        <item>2.6</item>-->
+<!--        <item>2.7</item>-->
+<!--        <item>2.8</item>-->
+<!--    </string-array>-->
 </resources>

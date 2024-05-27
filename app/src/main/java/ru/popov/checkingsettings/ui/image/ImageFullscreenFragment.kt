@@ -27,9 +27,10 @@ class ImageFullscreenFragment : Fragment(R.layout.fragment_image_fullscreen) {
         binding.image.setImageURI(uriImage.toUri())
 
         binding.close.setOnClickListener {
-            findNavController().navigate(
-                ImageFullscreenFragmentDirections.actionImageFullscreenFragmentToImagesFragment(date)
-            )
+            findNavController().popBackStack()
+//            findNavController().navigate(
+//                ImageFullscreenFragmentDirections.actionImageFullscreenFragmentToImagesFragment(date)
+//            )
         }
     }
 }

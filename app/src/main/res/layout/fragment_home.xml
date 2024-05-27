@@ -133,6 +133,47 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragmentAssembly"
                 tools:layout="@layout/fragment_speaker_test" />
 
+            <fragment
+                android:id="@+id/fragmentBipTest"
+                android:name="ru.popov.checkingsettings.ui.TestBipFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentBipTest"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentSpeakerTest"
+                tools:layout="@layout/fragment_bip_test" />
+
+            <fragment
+                android:id="@+id/fragmentTestConnector"
+                android:name="ru.popov.checkingsettings.ui.TestConnectorFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentTestConnector"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentBipTest"
+                tools:layout="@layout/fragment_test_connector" />
+
+            <fragment
+                android:id="@+id/fragmentOutage"
+                android:name="ru.popov.checkingsettings.ui.OutageFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="fragmentOutage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentTestConnector"
+                tools:layout="@layout/fragment_outage" />
+
+            <fragment
+                android:id="@+id/fragmentExitDevice"
+                android:name="ru.popov.checkingsettings.ui.ExitDeviceFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:tag="fragmentExitDevice"
+                app:layout_constraintStart_toEndOf="@+id/fragmentOutage"
+                app:layout_constraintTop_toBottomOf="@+id/fragmentTestConnector"
+                tools:layout="@layout/fragment_exit_device" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

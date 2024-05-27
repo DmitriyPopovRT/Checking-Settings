@@ -11,11 +11,15 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import jcifs.smb1.smb1.NtlmPasswordAuthentication
-import jcifs.smb1.smb1.SmbFile
+import ch.swaechter.smbjwrapper.SmbConnection
+import ch.swaechter.smbjwrapper.SmbFile
+import com.hierynomus.smbj.auth.AuthenticationContext
+//import jcifs.smb1.smb1.NtlmPasswordAuthentication
+//import jcifs.smb1.smb1.SmbFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.popov.checkingsettings.R
+import java.io.File
 import java.util.*
 
 object Utils {
@@ -121,22 +125,40 @@ object Utils {
             val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
             val pathDay = if (date.isEmpty()) {
-                "${LoginInformation.PATH}/$currentYear/$currentMonth/$currentDay"
+                LoginInformation.PATH + "/$currentYear/$currentMonth/$currentDay"
             } else {
-                "${LoginInformation.PATH}/$date"
+                LoginInformation.PATH + "/$date"
             }
 
-            val auth = NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
-            val smbFolder = SmbFile(pathDay, auth)
+            val authenticationContext =
+                AuthenticationContext(
+                    LoginInformation.USER,
+                    LoginInformation.PASS.toCharArray(),
+                    ""
+                )
+            // Ресолвим путь назначения в SmbFile
+            SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+                authenticationContext
+            ).use { smbConnection ->
 
-            if (!smbFolder.exists()) {
-                smbFolder.mkdirs()
+                val smbFolder = SmbFile(smbConnection, pathDay)
+
+                if (!smbFolder.isExisting) {
+                    smbFolder.createFile()
+                }
+                pathDay
             }
-            pathDay
         }
     }
 
     fun haveQ(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
+
+    class MyHash(
+        val flag: Boolean?,
+        val valueNote: String?
+    )
 }

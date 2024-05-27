@@ -15,6 +15,7 @@ import timber.log.Timber
 import java.util.*
 import kotlin.collections.HashMap
 import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter.ValueAndCalibration
+import ru.popov.checkingsettings.utils.Utils
 
 class HomeViewModel(
     application: Application
@@ -34,6 +35,8 @@ class HomeViewModel(
     private val isFileSettingsExistLiveData = SingleLiveEvent<Boolean>()
     private val permissionsGrantedMutableLiveData = MutableLiveData(true)
     private val listStatisticsMutableLiveData = SingleLiveEvent<HashMap<Date, ValueAndCalibration>>()
+    private val listStatisticsOutageMutableLiveData = SingleLiveEvent<HashMap<Date, Boolean>>()
+    private val listStatisticsExitDeviceMutableLiveData = SingleLiveEvent<HashMap<Date, Utils.MyHash>>()
 
     val stringJsonSettings: LiveData<String>
         get() = stringJsonSettingsLiveData
@@ -58,6 +61,10 @@ class HomeViewModel(
         get() = permissionsGrantedMutableLiveData
     val listStatistics: LiveData<HashMap<Date, ValueAndCalibration>>
         get() = listStatisticsMutableLiveData
+    val listStatisticsOutage: LiveData<HashMap<Date, Boolean>>
+        get() = listStatisticsOutageMutableLiveData
+    val listStatisticsExitDevice: LiveData<HashMap<Date, Utils.MyHash>>
+        get() = listStatisticsExitDeviceMutableLiveData
 
     fun generateJson() {
         viewModelScope.launch {
@@ -112,23 +119,22 @@ class HomeViewModel(
     }
 
     fun convertAssemblyAndLabelResultToJson(
-        wp28: Boolean?,
+        wp33: Boolean?,
+        wp34: Boolean?,
+        wp36: Boolean?,
+        wp37: Boolean?,
         textNote: String
     ) {
         viewModelScope.launch {
-            repository.convertAssemblyAndLabelResultToJson(wp28, textNote)
+            repository.convertAssemblyAndLabelResultToJson(wp33, wp34, wp36, wp37, textNote)
         }
     }
 
     fun convertAssemblyResultToJson(
-        wp11AssemblyEB: ValueAndCalibration?,
-        wp12AssemblyEB: ValueAndCalibration?,
-        wp13AssemblyEB: ValueAndCalibration?,
-        wp14AssemblyEB: ValueAndCalibration?,
-        wp15AssemblyEB: ValueAndCalibration?,
-        wp16AssemblyEB: ValueAndCalibration?,
-        wp17AssemblyEB: ValueAndCalibration?,
-        wp18AssemblyEB: ValueAndCalibration?,
+        wp07AssemblyEB: ValueAndCalibration?,
+        wp08AssemblyEB: ValueAndCalibration?,
+        wp09AssemblyEB: ValueAndCalibration?,
+        wp10AssemblyEB: ValueAndCalibration?,
         textNoteAssemblyEB: String?,
         wp11AssemblyBip: ValueAndCalibration?,
         wp12AssemblyBip: ValueAndCalibration?,
@@ -136,45 +142,26 @@ class HomeViewModel(
         wp14AssemblyBip: ValueAndCalibration?,
         wp15AssemblyBip: ValueAndCalibration?,
         wp16AssemblyBip: ValueAndCalibration?,
-        wp17AssemblyBip: ValueAndCalibration?,
-        wp18AssemblyBip: ValueAndCalibration?,
         textNoteAssemblyBip: String?,
-        wp11AssemblySpeaker: ValueAndCalibration?,
-        wp12AssemblySpeaker: ValueAndCalibration?,
-        wp13AssemblySpeaker: ValueAndCalibration?,
-        wp14AssemblySpeaker: ValueAndCalibration?,
-        wp15AssemblySpeaker: ValueAndCalibration?,
-        wp16AssemblySpeaker: ValueAndCalibration?,
-        wp17AssemblySpeaker: ValueAndCalibration?,
-        wp18AssemblySpeaker: ValueAndCalibration?,
-        textNoteAssemblySpeaker: String?,
-        wp11AssemblySolderingTemperature: ValueAndCalibration?,
-        wp12AssemblySolderingTemperature: ValueAndCalibration?,
-        wp13AssemblySolderingTemperature: ValueAndCalibration?,
-        wp14AssemblySolderingTemperature: ValueAndCalibration?,
-        wp15AssemblySolderingTemperature: ValueAndCalibration?,
-        wp16AssemblySolderingTemperature: ValueAndCalibration?,
-        wp17AssemblySolderingTemperature: ValueAndCalibration?,
-        wp18AssemblySolderingTemperature: ValueAndCalibration?,
-        textNoteAssemblySolderingTemperature: String?,
-        wp23AssemblyFixing: ValueAndCalibration?,
-        wp24AssemblyFixing: ValueAndCalibration?,
-        wp25AssemblyFixing: ValueAndCalibration?,
-        wp26AssemblyFixing: ValueAndCalibration?,
-        wp27AssemblyFixing: ValueAndCalibration?,
-        wp28AssemblyFixing: ValueAndCalibration?,
-        textNoteAssemblyFixing: String?
+        wp01AssemblySolderingTemperature: ValueAndCalibration?,
+        wp02AssemblySolderingTemperature: ValueAndCalibration?,
+        wp03AssemblySolderingTemperature: ValueAndCalibration?,
+        wp04AssemblySolderingTemperature: ValueAndCalibration?,
+        wp05AssemblySolderingTemperature: ValueAndCalibration?,
+        wp19AssemblySolderingTemperature: ValueAndCalibration?,
+        wp20AssemblySolderingTemperature: ValueAndCalibration?,
+        wp21AssemblySolderingTemperature: ValueAndCalibration?,
+        wp22AssemblySolderingTemperature: ValueAndCalibration?,
+        wp23AssemblySolderingTemperature: ValueAndCalibration?,
+        wp24AssemblySolderingTemperature: ValueAndCalibration?,
+        textNoteAssemblySolderingTemperature: String?
     ) {
         viewModelScope.launch {
             repository.convertAssemblyResultToJson(
-                wp11AssemblyEB,
-                wp12AssemblyEB,
-                wp13AssemblyEB,
-                wp14AssemblyEB,
-                wp15AssemblyEB,
-                wp16AssemblyEB,
-                wp17AssemblyEB,
-                wp18AssemblyEB,
+                wp07AssemblyEB,
+                wp08AssemblyEB,
+                wp09AssemblyEB,
+                wp10AssemblyEB,
                 textNoteAssemblyEB,
                 wp11AssemblyBip,
                 wp12AssemblyBip,
@@ -182,44 +169,70 @@ class HomeViewModel(
                 wp14AssemblyBip,
                 wp15AssemblyBip,
                 wp16AssemblyBip,
-                wp17AssemblyBip,
-                wp18AssemblyBip,
                 textNoteAssemblyBip,
-                wp11AssemblySpeaker,
-                wp12AssemblySpeaker,
-                wp13AssemblySpeaker,
-                wp14AssemblySpeaker,
-                wp15AssemblySpeaker,
-                wp16AssemblySpeaker,
-                wp17AssemblySpeaker,
-                wp18AssemblySpeaker,
-                textNoteAssemblySpeaker,
-                wp11AssemblySolderingTemperature,
-                wp12AssemblySolderingTemperature,
-                wp13AssemblySolderingTemperature,
-                wp14AssemblySolderingTemperature,
-                wp15AssemblySolderingTemperature,
-                wp16AssemblySolderingTemperature,
-                wp17AssemblySolderingTemperature,
-                wp18AssemblySolderingTemperature,
-                textNoteAssemblySolderingTemperature,
-                wp23AssemblyFixing,
-                wp24AssemblyFixing,
-                wp25AssemblyFixing,
-                wp26AssemblyFixing,
-                wp27AssemblyFixing,
-                wp28AssemblyFixing,
-                textNoteAssemblyFixing
+                wp01AssemblySolderingTemperature,
+                wp02AssemblySolderingTemperature,
+                wp03AssemblySolderingTemperature,
+                wp04AssemblySolderingTemperature,
+                wp05AssemblySolderingTemperature,
+                wp19AssemblySolderingTemperature,
+                wp20AssemblySolderingTemperature,
+                wp21AssemblySolderingTemperature,
+                wp22AssemblySolderingTemperature,
+                wp23AssemblySolderingTemperature,
+                wp24AssemblySolderingTemperature,
+                textNoteAssemblySolderingTemperature
             )
         }
     }
 
     fun convertSpeakerTestResultToJson(
-        wp111: Boolean?,
+        wp25: Boolean?,
+        wp26: Boolean?,
+        wpGold25: Boolean?,
+        wpGold26: Boolean?,
+        textNote: String,
+        textNoteGold: String
+    ) {
+        viewModelScope.launch {
+            repository.convertSpeakerTestResultToJson(wp25, wp26, wpGold25, wpGold26, textNote, textNoteGold)
+        }
+    }
+
+    fun convertBipTestResultToJson(
+        wp17: Boolean?,
+        wp18: Boolean?,
+        textNote: String,
+    ) {
+        viewModelScope.launch {
+            repository.convertBipTestResultToJson(wp17, wp18, textNote)
+        }
+    }
+
+    fun convertConnectorTestResultToJson(
+        wp35: Boolean?,
         textNote: String
     ) {
         viewModelScope.launch {
-            repository.convertSpeakerTestResultToJson(wp111, textNote)
+            repository.convertConnectorTestResultToJson(wp35, textNote)
+        }
+    }
+
+    fun convertExitDeviceResultToJson(
+        exitDevice: Boolean?,
+        textNoteExitDevice: String
+    ) {
+        viewModelScope.launch {
+            repository.convertExitDeviceResultToJson(exitDevice, textNoteExitDevice)
+        }
+    }
+
+    fun convertOutageResultToJson(
+        outage: Boolean?,
+        textNote: String
+    ) {
+        viewModelScope.launch {
+            repository.convertOutageResultToJson(outage, textNote)
         }
     }
 
@@ -357,6 +370,40 @@ class HomeViewModel(
             try {
                 val result = repository.downloadStatistics(year, month, day, operation, workPlace)
                 listStatisticsMutableLiveData.postValue(result)
+            } catch (e: Exception) {
+                Timber.e(e)
+                isErrorSettingsLiveData.postValue(e.message)
+            }
+        }
+    }
+
+    fun downloadStatisticsOutage(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = repository.downloadStatisticsOutage(year, month, day, operation)
+                listStatisticsOutageMutableLiveData.postValue(result)
+            } catch (e: Exception) {
+                Timber.e(e)
+                isErrorSettingsLiveData.postValue(e.message)
+            }
+        }
+    }
+
+    fun downloadStatisticsExitDevice(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val result = repository.downloadStatisticsExitDevice(year, month, day, operation)
+                listStatisticsExitDeviceMutableLiveData.postValue(result)
             } catch (e: Exception) {
                 Timber.e(e)
                 isErrorSettingsLiveData.postValue(e.message)

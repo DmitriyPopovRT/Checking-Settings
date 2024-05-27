@@ -18,35 +18,19 @@ class AssemblyFragment : Fragment(R.layout.fragment_assembly) {
 
     fun clearView() {
         with(binding) {
-            editEB11.apply {
+            editEB07.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editEB12.apply {
+            editEB08.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editEB13.apply {
+            editEB09.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editEB14.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editEB15.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editEB16.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editEB17.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editEB18.apply {
+            editEB10.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
@@ -75,163 +59,81 @@ class AssemblyFragment : Fragment(R.layout.fragment_assembly) {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editBip17.apply {
+            noteAssemblyBip.text.clear()
+            editSoldering01.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editBip18.apply {
+            editSoldering02.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editTextModBip.text.clear()
-            editSpeaker11.apply {
+            editSoldering03.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker12.apply {
+            editSoldering04.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker13.apply {
+            editSoldering05.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker14.apply {
+            editSoldering19.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker15.apply {
+            editSoldering20.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker16.apply {
+            editSoldering21.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker17.apply {
+            editSoldering22.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editSpeaker18.apply {
+            editSoldering23.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
-            editTextModSpeaker.text.clear()
-            editSolderingTemperature11.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature12.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature13.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature14.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature15.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature16.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature17.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editSolderingTemperature18.apply {
+            editSoldering24.apply {
                 text.clear()
                 setBackgroundColor(Color.WHITE)
             }
             editTextModSolderingTemperature.text.clear()
-            editFixing23.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editFixing24.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editFixing25.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editFixing26.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editFixing27.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            editFixing28.apply {
-                text.clear()
-                setBackgroundColor(Color.WHITE)
-            }
-            noteAssemblyFixing.text.clear()
         }
     }
 
     fun setSettingsAssembly(assembly: CheckingSettingsCustomAdapter.AssemblyWrapper) {
         assembly.assemblyEB.let { assemblyEB ->
-            binding.editEB11.apply {
-                setText(assemblyEB.wp11?.value)
-                if (assemblyEB.wp11?.isCalibration == true) {
+            binding.editEB07.apply {
+                setText(assemblyEB.wp07?.value)
+                if (assemblyEB.wp07?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editEB12.apply {
-                setText(assemblyEB.wp12?.value)
-                if (assemblyEB.wp12?.isCalibration == true) {
+            binding.editEB08.apply {
+                setText(assemblyEB.wp08?.value)
+                if (assemblyEB.wp08?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editEB13.apply {
-                setText(assemblyEB.wp13?.value)
-                if (assemblyEB.wp13?.isCalibration == true) {
+            binding.editEB09.apply {
+                setText(assemblyEB.wp09?.value)
+                if (assemblyEB.wp09?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editEB14.apply {
-                setText(assemblyEB.wp14?.value)
-                if (assemblyEB.wp14?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editEB15.apply {
-                setText(assemblyEB.wp15?.value)
-                if (assemblyEB.wp15?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editEB16.apply {
-                setText(assemblyEB.wp16?.value)
-                if (assemblyEB.wp16?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editEB17.apply {
-                setText(assemblyEB.wp17?.value)
-                if (assemblyEB.wp17?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editEB18.apply {
-                setText(assemblyEB.wp18?.value)
-                if (assemblyEB.wp18?.isCalibration == true) {
+            binding.editEB10.apply {
+                setText(assemblyEB.wp10?.value)
+                if (assemblyEB.wp10?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
@@ -281,198 +183,97 @@ class AssemblyFragment : Fragment(R.layout.fragment_assembly) {
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editBip17.apply {
-                setText(assemblyBip.wp17?.value)
-                if (assemblyBip.wp17?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editBip18.apply {
-                setText(assemblyBip.wp18?.value)
-                if (assemblyBip.wp18?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editTextModBip.setText(assemblyBip.note)
-        }
-        assembly.assemblySpeaker.let { assemblySpeaker ->
-            binding.editSpeaker11.apply {
-                setText(assemblySpeaker.wp11?.value)
-                if (assemblySpeaker.wp11?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker12.apply {
-                setText(assemblySpeaker.wp12?.value)
-                if (assemblySpeaker.wp12?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker13.apply {
-                setText(assemblySpeaker.wp13?.value)
-                if (assemblySpeaker.wp13?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker14.apply {
-                setText(assemblySpeaker.wp14?.value)
-                if (assemblySpeaker.wp14?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker15.apply {
-                setText(assemblySpeaker.wp15?.value)
-                if (assemblySpeaker.wp15?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker16.apply {
-                setText(assemblySpeaker.wp16?.value)
-                if (assemblySpeaker.wp16?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker17.apply {
-                setText(assemblySpeaker.wp17?.value)
-                if (assemblySpeaker.wp17?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editSpeaker18.apply {
-                setText(assemblySpeaker.wp18?.value)
-                if (assemblySpeaker.wp18?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editTextModSpeaker.setText(assemblySpeaker.note)
+            binding.noteAssemblyBip.setText(assemblyBip.note)
         }
         assembly.solderingTemperature.let { solderingTemperature ->
-            binding.editSolderingTemperature11.apply {
-                setText(solderingTemperature.wp11?.value)
-                if (solderingTemperature.wp11?.isCalibration == true) {
+            binding.editSoldering01.apply {
+                setText(solderingTemperature.wp01?.value)
+                if (solderingTemperature.wp01?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature12.apply {
-                setText(solderingTemperature.wp12?.value)
-                if (solderingTemperature.wp12?.isCalibration == true) {
+            binding.editSoldering02.apply {
+                setText(solderingTemperature.wp02?.value)
+                if (solderingTemperature.wp02?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature13.apply {
-                setText(solderingTemperature.wp13?.value)
-                if (solderingTemperature.wp13?.isCalibration == true) {
+            binding.editSoldering03.apply {
+                setText(solderingTemperature.wp03?.value)
+                if (solderingTemperature.wp03?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature14.apply {
-                setText(solderingTemperature.wp14?.value)
-                if (solderingTemperature.wp14?.isCalibration == true) {
+            binding.editSoldering04.apply {
+                setText(solderingTemperature.wp04?.value)
+                if (solderingTemperature.wp04?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature15.apply {
-                setText(solderingTemperature.wp15?.value)
-                if (solderingTemperature.wp15?.isCalibration == true) {
+            binding.editSoldering05.apply {
+                setText(solderingTemperature.wp05?.value)
+                if (solderingTemperature.wp05?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature16.apply {
-                setText(solderingTemperature.wp16?.value)
-                if (solderingTemperature.wp16?.isCalibration == true) {
+            binding.editSoldering19.apply {
+                setText(solderingTemperature.wp19?.value)
+                if (solderingTemperature.wp19?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature17.apply {
-                setText(solderingTemperature.wp17?.value)
-                if (solderingTemperature.wp17?.isCalibration == true) {
+            binding.editSoldering20.apply {
+                setText(solderingTemperature.wp20?.value)
+                if (solderingTemperature.wp20?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
-            binding.editSolderingTemperature18.apply {
-                setText(solderingTemperature.wp18?.value)
-                if (solderingTemperature.wp18?.isCalibration == true) {
+            binding.editSoldering21.apply {
+                setText(solderingTemperature.wp21?.value)
+                if (solderingTemperature.wp21?.isCalibration == true) {
+                    isActivated = true
+                    setBackgroundColor(resources.getColor(R.color.blue_300))
+                }
+            }
+            binding.editSoldering22.apply {
+                setText(solderingTemperature.wp22?.value)
+                if (solderingTemperature.wp22?.isCalibration == true) {
+                    isActivated = true
+                    setBackgroundColor(resources.getColor(R.color.blue_300))
+                }
+            }
+            binding.editSoldering23.apply {
+                setText(solderingTemperature.wp23?.value)
+                if (solderingTemperature.wp23?.isCalibration == true) {
+                    isActivated = true
+                    setBackgroundColor(resources.getColor(R.color.blue_300))
+                }
+            }
+            binding.editSoldering24.apply {
+                setText(solderingTemperature.wp24?.value)
+                if (solderingTemperature.wp24?.isCalibration == true) {
                     isActivated = true
                     setBackgroundColor(resources.getColor(R.color.blue_300))
                 }
             }
             binding.editTextModSolderingTemperature.setText(solderingTemperature.note)
         }
-        assembly.assemblyFixing?.let { assemblyFixing ->
-            binding.editFixing23.apply {
-                setText(assemblyFixing.wp23?.value)
-                if (assemblyFixing.wp23?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editFixing24.apply {
-                setText(assemblyFixing.wp24?.value)
-                if (assemblyFixing.wp24?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editFixing25.apply {
-                setText(assemblyFixing.wp25?.value)
-                if (assemblyFixing.wp25?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editFixing26.apply {
-                setText(assemblyFixing.wp26?.value)
-                if (assemblyFixing.wp26?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editFixing27.apply {
-                setText(assemblyFixing.wp27?.value)
-                if (assemblyFixing.wp27?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.editFixing28.apply {
-                setText(assemblyFixing.wp28?.value)
-                if (assemblyFixing.wp28?.isCalibration == true) {
-                    isActivated = true
-                    setBackgroundColor(resources.getColor(R.color.blue_300))
-                }
-            }
-            binding.noteAssemblyFixing.setText(assemblyFixing.note)
-        }
     }
 
     fun onClickSendServer() {
         with(binding) {
             viewModel.convertAssemblyResultToJson(
-                ValueAndCalibration(editEB11.text.toString(), editEB11.isActivated),
-                ValueAndCalibration(editEB12.text.toString(), editEB12.isActivated),
-                ValueAndCalibration(editEB13.text.toString(), editEB13.isActivated),
-                ValueAndCalibration(editEB14.text.toString(), editEB14.isActivated),
-                ValueAndCalibration(editEB15.text.toString(), editEB15.isActivated),
-                ValueAndCalibration(editEB16.text.toString(), editEB16.isActivated),
-                ValueAndCalibration(editEB17.text.toString(), editEB17.isActivated),
-                ValueAndCalibration(editEB18.text.toString(), editEB18.isActivated),
+                ValueAndCalibration(editEB07.text.toString(), editEB07.isActivated),
+                ValueAndCalibration(editEB08.text.toString(), editEB08.isActivated),
+                ValueAndCalibration(editEB09.text.toString(), editEB09.isActivated),
+                ValueAndCalibration(editEB10.text.toString(), editEB10.isActivated),
                 editTextModEB.text.toString(),
                 ValueAndCalibration(editBip11.text.toString(), editBip11.isActivated),
                 ValueAndCalibration(editBip12.text.toString(), editBip12.isActivated),
@@ -480,58 +281,19 @@ class AssemblyFragment : Fragment(R.layout.fragment_assembly) {
                 ValueAndCalibration(editBip14.text.toString(), editBip14.isActivated),
                 ValueAndCalibration(editBip15.text.toString(), editBip15.isActivated),
                 ValueAndCalibration(editBip16.text.toString(), editBip16.isActivated),
-                ValueAndCalibration(editBip17.text.toString(), editBip17.isActivated),
-                ValueAndCalibration(editBip18.text.toString(), editBip18.isActivated),
-                editTextModBip.text.toString(),
-                ValueAndCalibration(editSpeaker11.text.toString(), editSpeaker11.isActivated),
-                ValueAndCalibration(editSpeaker12.text.toString(), editSpeaker12.isActivated),
-                ValueAndCalibration(editSpeaker13.text.toString(), editSpeaker13.isActivated),
-                ValueAndCalibration(editSpeaker14.text.toString(), editSpeaker14.isActivated),
-                ValueAndCalibration(editSpeaker15.text.toString(), editSpeaker15.isActivated),
-                ValueAndCalibration(editSpeaker16.text.toString(), editSpeaker16.isActivated),
-                ValueAndCalibration(editSpeaker17.text.toString(), editSpeaker17.isActivated),
-                ValueAndCalibration(editSpeaker18.text.toString(), editSpeaker18.isActivated),
-                editTextModSpeaker.text.toString(),
-                ValueAndCalibration(
-                    editSolderingTemperature11.text.toString(),
-                    editSolderingTemperature11.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature12.text.toString(),
-                    editSolderingTemperature12.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature13.text.toString(),
-                    editSolderingTemperature13.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature14.text.toString(),
-                    editSolderingTemperature14.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature15.text.toString(),
-                    editSolderingTemperature15.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature16.text.toString(),
-                    editSolderingTemperature16.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature17.text.toString(),
-                    editSolderingTemperature17.isActivated
-                ),
-                ValueAndCalibration(
-                    editSolderingTemperature18.text.toString(),
-                    editSolderingTemperature18.isActivated
-                ),
-                editTextModSolderingTemperature.text.toString(),
-                ValueAndCalibration(editFixing23.text.toString(), editFixing23.isActivated),
-                ValueAndCalibration(editFixing24.text.toString(), editFixing24.isActivated),
-                ValueAndCalibration(editFixing25.text.toString(), editFixing25.isActivated),
-                ValueAndCalibration(editFixing26.text.toString(), editFixing26.isActivated),
-                ValueAndCalibration(editFixing27.text.toString(), editFixing27.isActivated),
-                ValueAndCalibration(editFixing28.text.toString(), editFixing28.isActivated),
-                noteAssemblyFixing.text.toString()
+                noteAssemblyBip.text.toString(),
+                ValueAndCalibration(editSoldering01.text.toString(), editSoldering01.isActivated),
+                ValueAndCalibration(editSoldering02.text.toString(), editSoldering02.isActivated),
+                ValueAndCalibration(editSoldering03.text.toString(), editSoldering03.isActivated),
+                ValueAndCalibration(editSoldering04.text.toString(), editSoldering04.isActivated),
+                ValueAndCalibration(editSoldering05.text.toString(), editSoldering05.isActivated),
+                ValueAndCalibration(editSoldering19.text.toString(), editSoldering19.isActivated),
+                ValueAndCalibration(editSoldering20.text.toString(), editSoldering20.isActivated),
+                ValueAndCalibration(editSoldering21.text.toString(), editSoldering21.isActivated),
+                ValueAndCalibration(editSoldering22.text.toString(), editSoldering22.isActivated),
+                ValueAndCalibration(editSoldering23.text.toString(), editSoldering23.isActivated),
+                ValueAndCalibration(editSoldering24.text.toString(), editSoldering24.isActivated),
+                editTextModSolderingTemperature.text.toString()
             )
         }
     }
@@ -552,45 +314,27 @@ class AssemblyFragment : Fragment(R.layout.fragment_assembly) {
 
     fun onLongClickEditText() {
         with(binding) {
-            editEB11.setOnLongClickListener { customEditBack(it) }
-            editEB12.setOnLongClickListener { customEditBack(it) }
-            editEB13.setOnLongClickListener { customEditBack(it) }
-            editEB14.setOnLongClickListener { customEditBack(it) }
-            editEB15.setOnLongClickListener { customEditBack(it) }
-            editEB16.setOnLongClickListener { customEditBack(it) }
-            editEB17.setOnLongClickListener { customEditBack(it) }
-            editEB18.setOnLongClickListener { customEditBack(it) }
+            editEB07.setOnLongClickListener { customEditBack(it) }
+            editEB08.setOnLongClickListener { customEditBack(it) }
+            editEB09.setOnLongClickListener { customEditBack(it) }
+            editEB10.setOnLongClickListener { customEditBack(it) }
             editBip11.setOnLongClickListener { customEditBack(it) }
             editBip12.setOnLongClickListener { customEditBack(it) }
             editBip13.setOnLongClickListener { customEditBack(it) }
             editBip14.setOnLongClickListener { customEditBack(it) }
             editBip15.setOnLongClickListener { customEditBack(it) }
             editBip16.setOnLongClickListener { customEditBack(it) }
-            editBip17.setOnLongClickListener { customEditBack(it) }
-            editBip18.setOnLongClickListener { customEditBack(it) }
-            editSpeaker11.setOnLongClickListener { customEditBack(it) }
-            editSpeaker12.setOnLongClickListener { customEditBack(it) }
-            editSpeaker13.setOnLongClickListener { customEditBack(it) }
-            editSpeaker14.setOnLongClickListener { customEditBack(it) }
-            editSpeaker15.setOnLongClickListener { customEditBack(it) }
-            editSpeaker16.setOnLongClickListener { customEditBack(it) }
-            editSpeaker17.setOnLongClickListener { customEditBack(it) }
-            editSpeaker18.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature11.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature12.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature13.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature14.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature15.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature16.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature17.setOnLongClickListener { customEditBack(it) }
-            editSolderingTemperature18.setOnLongClickListener { customEditBack(it) }
-            editFixing23.setOnLongClickListener { customEditBack(it) }
-            editFixing24.setOnLongClickListener { customEditBack(it) }
-            editFixing25.setOnLongClickListener { customEditBack(it) }
-            editFixing26.setOnLongClickListener { customEditBack(it) }
-            editFixing27.setOnLongClickListener { customEditBack(it) }
-            editFixing28.setOnLongClickListener { customEditBack(it) }
+            editSoldering01.setOnLongClickListener { customEditBack(it) }
+            editSoldering02.setOnLongClickListener { customEditBack(it) }
+            editSoldering03.setOnLongClickListener { customEditBack(it) }
+            editSoldering04.setOnLongClickListener { customEditBack(it) }
+            editSoldering05.setOnLongClickListener { customEditBack(it) }
+            editSoldering19.setOnLongClickListener { customEditBack(it) }
+            editSoldering20.setOnLongClickListener { customEditBack(it) }
+            editSoldering21.setOnLongClickListener { customEditBack(it) }
+            editSoldering22.setOnLongClickListener { customEditBack(it) }
+            editSoldering23.setOnLongClickListener { customEditBack(it) }
+            editSoldering24.setOnLongClickListener { customEditBack(it) }
         }
     }
-
 }

@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSpeakerTest"
@@ -47,7 +46,7 @@
                 android:text="Генератор сигналов низкой частоты"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/workplaceSpeakerTest1.11"
+                app:layout_constraintBottom_toBottomOf="@+id/workplaceSpeakerTest25"
                 app:layout_constraintEnd_toStartOf="@+id/titleWorkPlaceSpeakerTest"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +60,7 @@
                 android:gravity="center"
                 android:text="Примечание:"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/workplaceSpeakerTest1.11"
+                app:layout_constraintBottom_toBottomOf="@+id/workplaceSpeakerTest25"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/titleWorkPlaceSpeakerTest"
@@ -77,14 +76,28 @@
                 android:gravity="center"
                 android:text="Номер рабочего места"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/workplaceSpeakerTest1.11"
+                app:layout_constraintBottom_toTopOf="@+id/workplaceSpeakerTest25"
                 app:layout_constraintEnd_toStartOf="@+id/noteLowFrequencySignalGenerator"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/titleLowFrequencySignalGenerator"
                 app:layout_constraintTop_toBottomOf="@+id/titleSpeakerTest" />
 
             <TextView
-                android:id="@+id/workplaceSpeakerTest1.11"
+                android:id="@+id/workplaceSpeakerTest25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="П1-25"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@+id/workplaceSpeakerTest26"
+                app:layout_constraintStart_toEndOf="@+id/titleLowFrequencySignalGenerator"
+                app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceSpeakerTest" />
+
+            <TextView
+                android:id="@+id/workplaceSpeakerTest26"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
@@ -92,87 +105,216 @@
                 android:layout_marginEnd="1dp"
                 android:background="@color/white"
                 android:gravity="center"
-                android:text="1.11"
+                android:text="П1-26"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout27"
                 app:layout_constraintEnd_toStartOf="@+id/noteLowFrequencySignalGenerator"
-                app:layout_constraintStart_toEndOf="@+id/titleLowFrequencySignalGenerator"
+                app:layout_constraintStart_toEndOf="@+id/workplaceSpeakerTest25"
                 app:layout_constraintTop_toBottomOf="@+id/titleWorkPlaceSpeakerTest" />
-
-            <!---->
+            <!--  -->
             <TextView
                 android:id="@+id/titleSettingSuccess"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:paddingStart="8dp"
-                android:text="Настройки соответствуют ТИ. Наличие звукового сигнала при подключении динамика"
+                android:text="Настройки соответствуют ТИ"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/titleGold"
                 app:layout_constraintEnd_toEndOf="@+id/titleLowFrequencySignalGenerator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleLowFrequencySignalGenerator" />
+            <!-- <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout27"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="1dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginEnd="1dp"
+                            android:background="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/editTextModSettingSuccess"
+                            app:layout_constraintStart_toEndOf="@+id/titleSettingSuccess"
+                            app:layout_constraintTop_toBottomOf="@+id/workplaceSpeakerTest25">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout27"
+                            <androidx.appcompat.widget.AppCompatImageButton
+                                android:id="@+id/buttonOk1.11"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@color/white"
+                                android:backgroundTint="@color/green_100"
+                                android:onClick="onClickOk"
+                                android:src="@drawable/ic_ok"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/buttonClose1.11"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatImageButton
+                                android:id="@+id/buttonClose1.11"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@color/white"
+                                android:backgroundTint="@color/red_100"
+                                android:onClick="onClickClose"
+                                android:src="@drawable/ic_close"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/buttonOk1.11"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout> -->
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk25"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="1dp"
                 android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editTextModSettingSuccess"
-                app:layout_constraintStart_toEndOf="@+id/titleSettingSuccess"
-                app:layout_constraintTop_toBottomOf="@+id/workplaceSpeakerTest1.11">
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose25"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceSpeakerTest25"
+                app:layout_constraintStart_toStartOf="@+id/workplaceSpeakerTest25"
+                app:layout_constraintTop_toBottomOf="@+id/workplaceSpeakerTest25" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/buttonOk1.11"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/white"
-                    android:backgroundTint="@color/green_100"
-                    android:onClick="onClickOk"
-                    android:src="@drawable/ic_ok"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonClose1.11"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose25"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSettingSuccess"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOk25"
+                app:layout_constraintStart_toStartOf="@+id/buttonOk25"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk25" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/buttonClose1.11"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/white"
-                    android:backgroundTint="@color/red_100"
-                    android:onClick="onClickClose"
-                    android:src="@drawable/ic_close"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/buttonOk1.11"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOk26"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonClose26"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceSpeakerTest26"
+                app:layout_constraintStart_toStartOf="@+id/workplaceSpeakerTest26"
+                app:layout_constraintTop_toBottomOf="@+id/workplaceSpeakerTest26" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonClose26"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="@+id/titleSettingSuccess"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOk26"
+                app:layout_constraintStart_toStartOf="@+id/buttonOk26"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOk26" />
 
             <EditText
                 android:id="@+id/editTextModSettingSuccess"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:paddingStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/editTextModGold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/noteLowFrequencySignalGenerator"
+                app:layout_constraintTop_toBottomOf="@+id/noteLowFrequencySignalGenerator" />
+
+            <TextView
+                android:id="@+id/titleGold"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:text="Наличие звукового сигнала при подключении золотого образца"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/titleLowFrequencySignalGenerator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleSettingSuccess" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkGold25"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseGold25"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceSpeakerTest25"
+                app:layout_constraintStart_toStartOf="@+id/workplaceSpeakerTest25"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose25" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseGold25"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOkGold25"
+                app:layout_constraintStart_toStartOf="@+id/buttonOkGold25"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkGold25" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonOkGold26"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/green_100"
+                android:src="@drawable/ic_ok"
+                app:layout_constraintBottom_toTopOf="@+id/buttonCloseGold26"
+                app:layout_constraintEnd_toEndOf="@+id/workplaceSpeakerTest26"
+                app:layout_constraintStart_toStartOf="@+id/workplaceSpeakerTest26"
+                app:layout_constraintTop_toBottomOf="@+id/buttonClose26" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/buttonCloseGold26"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:backgroundTint="@color/red_100"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonOkGold26"
+                app:layout_constraintStart_toStartOf="@+id/buttonOkGold26"
+                app:layout_constraintTop_toBottomOf="@+id/buttonOkGold26" />
+
+            <EditText
+                android:id="@+id/editTextModGold"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@color/white"
                 android:paddingStart="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/noteLowFrequencySignalGenerator"
-                app:layout_constraintTop_toBottomOf="@+id/noteLowFrequencySignalGenerator" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextModSettingSuccess" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

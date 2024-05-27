@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,6 +31,7 @@ import ru.popov.checkingsettings.R
 import ru.popov.checkingsettings.data.CheckingSettingsCustomAdapter
 import ru.popov.checkingsettings.databinding.FragmentStatisticsBinding
 import ru.popov.checkingsettings.ui.home.HomeViewModel
+import ru.popov.checkingsettings.utils.Utils
 import ru.popov.checkingsettings.utils.Utils.toast
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -53,6 +55,8 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     private var listStatistics =
         mutableMapOf<Date, CheckingSettingsCustomAdapter.ValueAndCalibration>()
+    private var listStatisticsOutage = mutableMapOf<Date, Boolean>()
+    private var listStatisticsExitDevice = mutableMapOf<Date, Utils.MyHash>()
 
     @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -104,22 +108,30 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                 Timber.d("adapter = ${it?.assembly}")
 
             } catch (e: Exception) {
-                Timber.d("error = ${e.message}")
+                Timber.d("error3 = ${e.message}")
             }
         }
         viewModel.isError.observe(viewLifecycleOwner) {
-            Timber.d("error = $it")
+            Timber.d("error4 = $it")
         }
 
         viewModel.listStatistics.observe(viewLifecycleOwner) {
             Timber.d("list = $it")
             listStatistics.putAll(it)
         }
+
+        viewModel.listStatisticsOutage.observe(viewLifecycleOwner) {
+            Timber.d("listStatisticsOutage = $it")
+            listStatisticsOutage.putAll(it)
+        }
+
+        viewModel.listStatisticsExitDevice.observe(viewLifecycleOwner) {
+            Timber.d("listStatisticsExitDevice = $it")
+            listStatisticsExitDevice.putAll(it)
+        }
     }
 
     private fun paintGraph() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.linearLayout.visibility = View.GONE
         val operation = binding.spinnerOperation.text.toString()
         val workPlace = binding.spinnerWorkPlace.text.toString()
 
@@ -127,6 +139,107 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         val calendarFrom: Calendar = GregorianCalendar(yearFrom, monthFrom, dayFrom)
         val calendarTo: Calendar = GregorianCalendar(yearTo, monthTo, dayTo)
         calendarTo.add(Calendar.DAY_OF_MONTH, 1)
+
+        if (operation == "Простой") {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.GONE
+            binding.linearLayout.removeAllViews()
+            CoroutineScope(Dispatchers.Default).launch {
+                val list = ArrayList<String>()
+                val dateFormatterHour = SimpleDateFormat("dd.MM.yyyy")
+                while (calendarFrom.before(calendarTo)) {
+                    Timber.d("день = ${df.format(calendarFrom.time)}")
+
+                    val year = calendarFrom.get(Calendar.YEAR)
+                    val month = (calendarFrom.get(Calendar.MONTH) + 1)
+                    val day = calendarFrom.get(Calendar.DAY_OF_MONTH)
+
+                    viewModel.downloadStatisticsOutage(year, month, day, operation)
+                    Thread.sleep(200)
+                    calendarFrom.add(Calendar.DAY_OF_MONTH, 1)
+                }
+
+                Thread.sleep(2000)
+                withContext(Dispatchers.Main) {
+                    for (one in listStatisticsOutage) {
+                        if (one.value) {
+                            list.add(dateFormatterHour.format(one.key))
+                        }
+                    }
+                    var str = ""
+                    val listIterator = list.listIterator()
+                    while (listIterator.hasNext()) listIterator.next()
+                    while (listIterator.hasPrevious()) {
+                        str += "${listIterator.previousIndex() + 1}" + ". ${listIterator.previous()}" + "\n"
+                    }
+
+                    val textView = TextView(context).apply {
+                        this.text = "Простой: \n" + str
+                        this.setTextColor(Color.BLACK)
+                        this.textSize = 20f
+                        this.setPadding(16, 0, 0, 0)
+                    }
+                    binding.linearLayout.addView(textView)
+
+                    binding.progressBar.visibility = View.GONE
+                    binding.linearLayout.visibility = View.VISIBLE
+                }
+                list.clear()
+            }
+            listStatisticsOutage.clear()
+            return
+        } else if (operation == "Выход оборудования из строя") {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.GONE
+            binding.linearLayout.removeAllViews()
+            CoroutineScope(Dispatchers.Default).launch {
+                val list = ArrayList<String>()
+                val dateFormatterHour = SimpleDateFormat("dd.MM.yyyy")
+                while (calendarFrom.before(calendarTo)) {
+                    Timber.d("день = ${df.format(calendarFrom.time)}")
+
+                    val year = calendarFrom.get(Calendar.YEAR)
+                    val month = (calendarFrom.get(Calendar.MONTH) + 1)
+                    val day = calendarFrom.get(Calendar.DAY_OF_MONTH)
+
+                    viewModel.downloadStatisticsExitDevice(year, month, day, operation)
+                    Thread.sleep(200)
+                    calendarFrom.add(Calendar.DAY_OF_MONTH, 1)
+                }
+
+                Thread.sleep(2000)
+                withContext(Dispatchers.Main) {
+                    for (one in listStatisticsExitDevice) {
+                        if (one.value.flag == true) {
+                            list.add(dateFormatterHour.format(one.key) + "     " + one.value.valueNote)
+                        }
+                    }
+                    var str = ""
+                    val listIterator = list.listIterator()
+                    while (listIterator.hasNext()) listIterator.next()
+                    while (listIterator.hasPrevious()) {
+                        str += "${listIterator.previousIndex() + 1}" + ". ${listIterator.previous()}" + "\n"
+                    }
+
+                    val textView = TextView(context).apply {
+                        this.text = "Выход оборудования из строя: \n" + str
+                        this.setTextColor(Color.BLACK)
+                        this.textSize = 20f
+                        this.setPadding(16, 0, 0, 0)
+                    }
+                    binding.linearLayout.addView(textView)
+
+                    binding.progressBar.visibility = View.GONE
+                    binding.linearLayout.visibility = View.VISIBLE
+                }
+                list.clear()
+            }
+            listStatisticsExitDevice.clear()
+            return
+        }
+
+        binding.progressBar.visibility = View.VISIBLE
+        binding.linearLayout.visibility = View.GONE
 
         CoroutineScope(Dispatchers.Default).launch {
             while (calendarFrom.before(calendarTo)) {
@@ -142,6 +255,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                 calendarFrom.add(Calendar.DAY_OF_MONTH, 1)
             }
 
+            Thread.sleep(1000)
             withContext(Dispatchers.Main) {
                 Timber.d("initGraph list = $listStatistics")
                 initGraph(listStatistics, operation)
@@ -206,7 +320,10 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
     }
 
     // Метод для построения графика
-    private fun initGraph(list: MutableMap<Date, CheckingSettingsCustomAdapter.ValueAndCalibration>, operation: String) {
+    private fun initGraph(
+        list: MutableMap<Date, CheckingSettingsCustomAdapter.ValueAndCalibration>,
+        operation: String
+    ) {
         // Удаляем предыдущие графики
         binding.linearLayout.removeAllViews()
 
@@ -280,21 +397,23 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         val dataPointLimitBottom = arrayOfNulls<DataPoint>(2)
         when (operation) {
             getString(R.string.assembly_eb) -> {
-                dataPointLimitTop[0] = DataPoint(d1, 3.5)
-                dataPointLimitTop[1] = DataPoint(d2, 3.5)
-                dataPointLimitBottom[0] = DataPoint(d1, 2.5)
-                dataPointLimitBottom[1] = DataPoint(d2, 2.5)
+                dataPointLimitTop[0] = DataPoint(d1, 2.8)
+                dataPointLimitTop[1] = DataPoint(d2, 2.8)
+                dataPointLimitBottom[0] = DataPoint(d1, 2.2)
+                dataPointLimitBottom[1] = DataPoint(d2, 2.2)
                 graph.viewport.setMinY(2.0)
-                graph.viewport.setMaxY(4.0)
+                graph.viewport.setMaxY(3.0)
             }
+
             getString(R.string.assembly_bip) -> {
-                dataPointLimitTop[0] = DataPoint(d1, 1.2)
-                dataPointLimitTop[1] = DataPoint(d2, 1.2)
-                dataPointLimitBottom[0] = DataPoint(d1, 0.8)
-                dataPointLimitBottom[1] = DataPoint(d2, 0.8)
-                graph.viewport.setMinY(0.5)
-                graph.viewport.setMaxY(1.5)
+                dataPointLimitTop[0] = DataPoint(d1, 1.4)
+                dataPointLimitTop[1] = DataPoint(d2, 1.4)
+                dataPointLimitBottom[0] = DataPoint(d1, 1.0)
+                dataPointLimitBottom[1] = DataPoint(d2, 1.0)
+                graph.viewport.setMinY(0.7)
+                graph.viewport.setMaxY(1.7)
             }
+
             getString(R.string.assembly_speaker) -> {
                 dataPointLimitTop[0] = DataPoint(d1, 2.5)
                 dataPointLimitTop[1] = DataPoint(d2, 2.5)
@@ -303,6 +422,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                 graph.viewport.setMinY(1.5)
                 graph.viewport.setMaxY(3.0)
             }
+
             getString(R.string.assembly_temp) -> {
                 dataPointLimitTop[0] = DataPoint(d1, 350.0)
                 dataPointLimitTop[1] = DataPoint(d2, 350.0)
@@ -311,6 +431,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                 graph.viewport.setMinY(300.0)
                 graph.viewport.setMaxY(450.0)
             }
+
             getString(R.string.assembly_fixation) -> {
                 dataPointLimitTop[0] = DataPoint(d1, 3.5)
                 dataPointLimitTop[1] = DataPoint(d2, 3.5)
@@ -372,9 +493,18 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
             if (spinner == binding.spinnerOperation) {
                 binding.spinnerWorkPlace.text.clear()
                 val textInput = view as MaterialTextView
-                if (textInput.text == getString(R.string.assembly_fixation)) {
-                    Timber.d("bench")
 
+                if (binding.spinnerOperation.text.toString() == getString(R.string.outageText))
+                    binding.textInputLayoutWorkPlace.isEnabled = false
+                else if (binding.spinnerOperation.text.toString() == getString(R.string.exitDevice)) {
+                    binding.textInputLayoutWorkPlace.isEnabled = false
+                } else
+                    binding.textInputLayoutWorkPlace.isEnabled = true
+
+//                binding.textInputLayoutWorkPlace.isEnabled = textInput.text != getString(R.string.outageText) || getString(R.string.exitDevice)
+
+                if (textInput.text == getString(R.string.assembly_bip)) {
+                    Timber.d("bench")
                     initSpinnerWorkplace(R.array.spinner_workplace2)
                 } else {
                     initSpinnerWorkplace(R.array.spinner_workplace1)
@@ -386,6 +516,13 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
             textInputLayout.error = null
             true
         } else {
+            if (binding.spinnerOperation.text.toString() == getString(R.string.outageText)) {
+                textInputLayout.error = null
+                return true
+            } else if (binding.spinnerOperation.text.toString() == getString(R.string.exitDevice)) {
+                textInputLayout.error = null
+                return true
+            }
             textInputLayout.error = getString(R.string.error_required_input_field)
             false
         }

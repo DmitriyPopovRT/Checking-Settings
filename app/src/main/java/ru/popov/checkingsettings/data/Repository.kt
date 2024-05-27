@@ -2,11 +2,11 @@ package ru.popov.checkingsettings.data
 
 import android.content.Context
 import android.os.Environment
+import ch.swaechter.smbjwrapper.SmbConnection
+import ch.swaechter.smbjwrapper.SmbDirectory
+import ch.swaechter.smbjwrapper.SmbFile
+import com.hierynomus.smbj.auth.AuthenticationContext
 import com.squareup.moshi.Moshi
-import jcifs.smb1.smb1.NtlmPasswordAuthentication
-import jcifs.smb1.smb1.SmbFile
-import jcifs.smb1.smb1.SmbFileInputStream
-import jcifs.smb1.smb1.SmbFileOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.popov.checkingsettings.R
@@ -16,23 +16,23 @@ import ru.popov.checkingsettings.utils.LoginInformation
 import ru.popov.checkingsettings.utils.Utils
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.text.SimpleDateFormat
-import java.util.*
-
+import java.util.Date
+import java.util.GregorianCalendar
 
 class Repository(
     private val context: Context
 ) {
-
     // Собираем строку json для передачи на сервер
     suspend fun generateJsonString(): String {
         return withContext(Dispatchers.Default) {
             val moshi = Moshi.Builder()
                 .add(CheckingSettingsCustomAdapter())
-//                .add(CheckingSettingsCustomAdapter.ColorAdapter2())
-//                .add(CheckingSettingsCustomAdapter.ColorAdapter())
                 .build()
 
             val adapter =
@@ -45,7 +45,11 @@ class Repository(
                     JsonSettings.programJson,
                     JsonSettings.assemblyAndLabelJson,
                     JsonSettings.assemblyJson,
-                    JsonSettings.speakerTestJson
+                    JsonSettings.speakerTestJson,
+                    JsonSettings.bipTestJson,
+                    JsonSettings.testConnectorJson,
+                    JsonSettings.outageJson,
+                    JsonSettings.exitDeviceJson
                 )
             )
         }
@@ -105,12 +109,18 @@ class Repository(
 
     // Собираем строку Окончательная сборка и печать этикеток
     fun convertAssemblyAndLabelResultToJson(
-        wp28: Boolean?,
+        wp33: Boolean?,
+        wp34: Boolean?,
+        wp36: Boolean?,
+        wp37: Boolean?,
         textNote: String
     ) {
         JsonSettings.assemblyAndLabelJson = CheckingSettingsCustomAdapter.AssemblyAndLabelWrapper(
             CheckingSettingsCustomAdapter.ScanningLabelNumberNotFound(
-                wp28,
+                wp33,
+                wp34,
+                wp36,
+                wp37,
                 textNote
             )
         )
@@ -118,14 +128,10 @@ class Repository(
 
     // Собираем строку Сборка
     fun convertAssemblyResultToJson(
-        wp11AssemblyEB: ValueAndCalibration?,
-        wp12AssemblyEB: ValueAndCalibration?,
-        wp13AssemblyEB: ValueAndCalibration?,
-        wp14AssemblyEB: ValueAndCalibration?,
-        wp15AssemblyEB: ValueAndCalibration?,
-        wp16AssemblyEB: ValueAndCalibration?,
-        wp17AssemblyEB: ValueAndCalibration?,
-        wp18AssemblyEB: ValueAndCalibration?,
+        wp07AssemblyEB: ValueAndCalibration?,
+        wp08AssemblyEB: ValueAndCalibration?,
+        wp09AssemblyEB: ValueAndCalibration?,
+        wp10AssemblyEB: ValueAndCalibration?,
         textNoteAssemblyEB: String?,
         wp11AssemblyBip: ValueAndCalibration?,
         wp12AssemblyBip: ValueAndCalibration?,
@@ -133,45 +139,26 @@ class Repository(
         wp14AssemblyBip: ValueAndCalibration?,
         wp15AssemblyBip: ValueAndCalibration?,
         wp16AssemblyBip: ValueAndCalibration?,
-        wp17AssemblyBip: ValueAndCalibration?,
-        wp18AssemblyBip: ValueAndCalibration?,
         textNoteAssemblyBip: String?,
-        wp11AssemblySpeaker: ValueAndCalibration?,
-        wp12AssemblySpeaker: ValueAndCalibration?,
-        wp13AssemblySpeaker: ValueAndCalibration?,
-        wp14AssemblySpeaker: ValueAndCalibration?,
-        wp15AssemblySpeaker: ValueAndCalibration?,
-        wp16AssemblySpeaker: ValueAndCalibration?,
-        wp17AssemblySpeaker: ValueAndCalibration?,
-        wp18AssemblySpeaker: ValueAndCalibration?,
-        textNoteAssemblySpeaker: String?,
-        wp11AssemblySolderingTemperature: ValueAndCalibration?,
-        wp12AssemblySolderingTemperature: ValueAndCalibration?,
-        wp13AssemblySolderingTemperature: ValueAndCalibration?,
-        wp14AssemblySolderingTemperature: ValueAndCalibration?,
-        wp15AssemblySolderingTemperature: ValueAndCalibration?,
-        wp16AssemblySolderingTemperature: ValueAndCalibration?,
-        wp17AssemblySolderingTemperature: ValueAndCalibration?,
-        wp18AssemblySolderingTemperature: ValueAndCalibration?,
+        wp01AssemblySolderingTemperature: ValueAndCalibration?,
+        wp02AssemblySolderingTemperature: ValueAndCalibration?,
+        wp03AssemblySolderingTemperature: ValueAndCalibration?,
+        wp04AssemblySolderingTemperature: ValueAndCalibration?,
+        wp05AssemblySolderingTemperature: ValueAndCalibration?,
+        wp19AssemblySolderingTemperature: ValueAndCalibration?,
+        wp20AssemblySolderingTemperature: ValueAndCalibration?,
+        wp21AssemblySolderingTemperature: ValueAndCalibration?,
+        wp22AssemblySolderingTemperature: ValueAndCalibration?,
+        wp23AssemblySolderingTemperature: ValueAndCalibration?,
+        wp24AssemblySolderingTemperature: ValueAndCalibration?,
         textNoteAssemblySolderingTemperature: String?,
-        wp23AssemblyFixing: ValueAndCalibration?,
-        wp24AssemblyFixing: ValueAndCalibration?,
-        wp25AssemblyFixing: ValueAndCalibration?,
-        wp26AssemblyFixing: ValueAndCalibration?,
-        wp27AssemblyFixing: ValueAndCalibration?,
-        wp28AssemblyFixing: ValueAndCalibration?,
-        textNoteAssemblyFixing: String?
     ) {
         JsonSettings.assemblyJson = CheckingSettingsCustomAdapter.AssemblyWrapper(
             CheckingSettingsCustomAdapter.AssemblyEB(
-                wp11AssemblyEB,
-                wp12AssemblyEB,
-                wp13AssemblyEB,
-                wp14AssemblyEB,
-                wp15AssemblyEB,
-                wp16AssemblyEB,
-                wp17AssemblyEB,
-                wp18AssemblyEB,
+                wp07AssemblyEB,
+                wp08AssemblyEB,
+                wp09AssemblyEB,
+                wp10AssemblyEB,
                 textNoteAssemblyEB
             ),
             CheckingSettingsCustomAdapter.AssemblyBIP(
@@ -181,84 +168,151 @@ class Repository(
                 wp14AssemblyBip,
                 wp15AssemblyBip,
                 wp16AssemblyBip,
-                wp17AssemblyBip,
-                wp18AssemblyBip,
                 textNoteAssemblyBip
             ),
-            CheckingSettingsCustomAdapter.AssemblySpeaker(
-                wp11AssemblySpeaker,
-                wp12AssemblySpeaker,
-                wp13AssemblySpeaker,
-                wp14AssemblySpeaker,
-                wp15AssemblySpeaker,
-                wp16AssemblySpeaker,
-                wp17AssemblySpeaker,
-                wp18AssemblySpeaker,
-                textNoteAssemblySpeaker
-            ),
             CheckingSettingsCustomAdapter.SolderingTemperature(
-                wp11AssemblySolderingTemperature,
-                wp12AssemblySolderingTemperature,
-                wp13AssemblySolderingTemperature,
-                wp14AssemblySolderingTemperature,
-                wp15AssemblySolderingTemperature,
-                wp16AssemblySolderingTemperature,
-                wp17AssemblySolderingTemperature,
-                wp18AssemblySolderingTemperature,
+                wp01AssemblySolderingTemperature,
+                wp02AssemblySolderingTemperature,
+                wp03AssemblySolderingTemperature,
+                wp04AssemblySolderingTemperature,
+                wp05AssemblySolderingTemperature,
+                wp19AssemblySolderingTemperature,
+                wp20AssemblySolderingTemperature,
+                wp21AssemblySolderingTemperature,
+                wp22AssemblySolderingTemperature,
+                wp23AssemblySolderingTemperature,
+                wp24AssemblySolderingTemperature,
                 textNoteAssemblySolderingTemperature
-            ),
-            CheckingSettingsCustomAdapter.AssemblyFixing(
-                wp23AssemblyFixing,
-                wp24AssemblyFixing,
-                wp25AssemblyFixing,
-                wp26AssemblyFixing,
-                wp27AssemblyFixing,
-                wp28AssemblyFixing,
-                textNoteAssemblyFixing
             )
         )
     }
 
     // Собираем строку Проверка динамиков
     fun convertSpeakerTestResultToJson(
-        wp111: Boolean?,
-        textNote: String
+        wp25: Boolean?,
+        wp26: Boolean?,
+        wpGold25: Boolean?,
+        wpGold26: Boolean?,
+        textNote: String,
+        textNoteGold: String
     ) {
         JsonSettings.speakerTestJson = CheckingSettingsCustomAdapter.SpeakerTestWrapper(
             CheckingSettingsCustomAdapter.CheckSoundSignalWhenSpeakerConnected(
-                wp111,
+                wp25,
+                wp26,
+                wpGold25,
+                wpGold26,
+                textNote,
+                textNoteGold
+            )
+        )
+    }
+
+    // Собираем строку Проверка БИП
+    fun convertBipTestResultToJson(
+        wp17: Boolean?,
+        wp18: Boolean?,
+        textNote: String
+    ) {
+        JsonSettings.bipTestJson = CheckingSettingsCustomAdapter.BipTestWrapper(
+            CheckingSettingsCustomAdapter.GoldBipTest(
+                wp17,
+                wp18,
                 textNote
+            )
+        )
+    }
+
+    // Собираем строку Проверка соединителя
+    fun convertConnectorTestResultToJson(
+        wp35: Boolean?,
+        textNote: String
+    ) {
+        JsonSettings.testConnectorJson = CheckingSettingsCustomAdapter.TestConnectorWrapper(
+            CheckingSettingsCustomAdapter.CheckingGold(
+                wp35,
+                textNote
+            )
+        )
+    }
+
+    // Собираем строку Простой
+    fun convertOutageResultToJson(
+        outage: Boolean?,
+        textNote: String
+    ) {
+        JsonSettings.outageJson = CheckingSettingsCustomAdapter.OutageWrapper(
+            CheckingSettingsCustomAdapter.CheckingOutage(
+                outage,
+                textNote
+            )
+        )
+    }
+
+    // Собираем строку Проверка соединителя
+    fun convertExitDeviceResultToJson(
+        exitDevice: Boolean?,
+        textNoteExitDevice: String
+    ) {
+        JsonSettings.exitDeviceJson = CheckingSettingsCustomAdapter.ExitDeviceWrapper(
+            CheckingSettingsCustomAdapter.ExitDevice(
+                exitDevice,
+                textNoteExitDevice
             )
         )
     }
 
     // Сохраняем строку json в файл на сервере
     suspend fun saveFileToServer(strJson: String, date: String): Boolean {
-        return withContext(Dispatchers.Default) {
+        return withContext(Dispatchers.IO) {
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) false
 
             // Создаем архитектуру папок на сервере и получаем путь к файлу настроек
             val path = Utils.createFolderOnServer(date)
-
             Timber.d("fileFolder = $path")
 
             // Отслеживаем время загрузки данных
             val start = System.currentTimeMillis()
 
-            // Создаем объект аутентификатор
-            val auth =
-                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+            val authenticationContext =
+                AuthenticationContext(
+                    LoginInformation.USER,
+                    LoginInformation.PASS.toCharArray(),
+                    ""
+                )
+//            val clientConfig = SmbConfig.builder()
+//                .withDfsEnabled(true)
+//                .withSecurityProvider(BCSecurityProvider())
+//                .withDialects(SMB2Dialect.SMB_3_1_1)
+//                .withMultiProtocolNegotiate(true)
+//                .withSigningRequired(true)
+//                .withEncryptData(true)
+//                .build()
 
-            // Создаем файл
-            val fileSettings = SmbFile(path + File.separator + LoginInformation.NAME_FILE, auth)
+            // Ресолвим путь назначения в SmbFile
+            val smbConnect = SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+                authenticationContext
+            )
+            val smbFile = SmbFile(smbConnect, path + File.separator + LoginInformation.NAME_FILE)
 
-            // Создаем объект для потока куда мы будем писать наш файл
-            val destFileName = SmbFileOutputStream(fileSettings)
-
-            destFileName.buffered().use { fileOutputStream ->
-                fileOutputStream.write(strJson.toByteArray())
+            var destFileName: OutputStream? = null
+            try {
+                smbFile.deleteFile()
+                destFileName = smbFile.outputStream
+                destFileName.buffered().use { fileOutputStream ->
+                    fileOutputStream.write(strJson.toByteArray())
+                }
+            } catch (ex: IOException) {
+                println(ex.message)
+            } finally {
+                try {
+                    destFileName?.close()
+                } catch (ex: IOException) {
+                    println(ex.message)
+                }
             }
-            Timber.d("time = ${System.currentTimeMillis() - start}")
             true
         }
     }
@@ -278,20 +332,44 @@ class Repository(
             val timeStamp: String = SimpleDateFormat("HH-mm-ss dd.MM.yyyy").format(Date())
 
             // Создаем объект аутентификатор
-            val auth =
-                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
+            val authenticationContext = AuthenticationContext(
+                LoginInformation.USER,
+                LoginInformation.PASS.toCharArray(),
+                ""
+            )
+            SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+                authenticationContext
+            ).use { smbConnection ->
+                // Создаем файл
+                val filePhoto =
+                    SmbFile(smbConnection, path + File.separator + timeStamp + ".jpeg")
 
-            // Создаем файл
-            val fileSettings = SmbFile(path + File.separator + timeStamp + ".jpeg", auth)
-
-            // Создаем объект для потока куда мы будем писать наш файл
-            val destFileName = SmbFileOutputStream(fileSettings)
-
-            destFileName.buffered().use { fileOutputStream ->
-                fileOutputStream.write(byteArray)
+                // Создаем объект для потока куда мы будем писать наш файл
+                var destFileName: OutputStream? = null
+                try {
+                    destFileName = filePhoto.outputStream
+                    destFileName.buffered().use { fileOutputStream ->
+                        fileOutputStream.write(byteArray)
+                    }
+                } catch (ex: IOException) {
+                    println(ex.message)
+                } finally {
+                    try {
+                        destFileName?.close()
+                    } catch (ex: IOException) {
+                        println(ex.message)
+                    }
+                }
+//                val destFileName = filePhoto.outputStream
+//
+//                destFileName.buffered().use { fileOutputStream ->
+//                    fileOutputStream.write(byteArray)
+//                }
+//                Timber.d("time = ${System.currentTimeMillis() - start}")
+                true
             }
-            Timber.d("time = ${System.currentTimeMillis() - start}")
-            true
         }
     }
 
@@ -302,41 +380,76 @@ class Repository(
             // Создаем архитектуру папок на сервере и получаем путь к папке
             val path = Utils.createFolderOnServer(date) + File.separator
 
-            val auth = NtlmPasswordAuthentication(
-                "", LoginInformation.USER, LoginInformation.PASS
+            // Создаем объект аутентификатор
+            val authenticationContext = AuthenticationContext(
+                LoginInformation.USER,
+                LoginInformation.PASS.toCharArray(),
+                ""
             )
+            SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+                authenticationContext
+            ).use { smbConnection ->
+                // Ресолвим путь назначения в SmbFile
+                val baseDir = SmbDirectory(smbConnection, path)
+//                val baseDir =
+//                    SmbFile(smbConnection, path)
 
-            // Ресолвим путь назначения в SmbFile
-            val baseDir = SmbFile(
-                path,
-                auth
-            )
+                Timber.d("path = $path")
+                val files = baseDir.files
+                for (i in files.indices) {
+                    val fileName = files[i].name
+                    val extension = fileName.substring(fileName.lastIndexOf(".") + 1)
+                    if (extension != "jpeg") {
+                        continue
+                    }
+                    val smbFile = files[i]
+                    val storageDir: File? =
+                        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                    val targetFile = File("$storageDir/$fileName")
+                    if (!targetFile.exists()) {
+                        targetFile.createNewFile()
+                    }
 
-            Timber.d("path = $path")
+                    var smbFileInputStream: InputStream? = null
+                    try {
+                        smbFileInputStream = smbFile.inputStream
+                        smbFileInputStream.use {
+                            Files.copy(
+                                it,
+                                targetFile.toPath(),
+                                StandardCopyOption.REPLACE_EXISTING
+                            )
+                        }
+                    } catch (ex: IOException) {
+                        println(ex.message)
+                    } finally {
+                        try {
+                            smbFileInputStream?.close()
+                        } catch (ex: IOException) {
+                            println(ex.message)
+                        }
+                    }
 
-            val files = baseDir.listFiles()
-            for (i in files.indices) {
-                val fileName = files[i].name
-                val extension = fileName.substring(fileName.lastIndexOf(".") + 1)
-                if (extension != "jpeg") {
-                    continue
-                }
-                val smbFile = files[i]
-                val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                val targetFile = File("$storageDir/$fileName")
-                if (!targetFile.exists()) {
-                    targetFile.createNewFile()
-                }
+//                    val smbFileInputStream = smbFile.inputStream
+//                    smbFileInputStream.use {
+//                        Files.copy(
+//                            it,
+//                            targetFile.toPath(),
+//                            StandardCopyOption.REPLACE_EXISTING
+//                        )
+//                    }
+//                    smbFileInputStream.close()
 
-                val smbFileInputStream = SmbFileInputStream(smbFile)
-                smbFileInputStream.use {
-                    Files.copy(
-                        it,
-                        targetFile.toPath(),
-                        StandardCopyOption.REPLACE_EXISTING
-                    )
-                }
-
+//                smbFile.inputStream.use { inputStream ->
+//                    Files.copy(
+//                        it,
+//                        targetFile.toPath(),
+//                        StandardCopyOption.REPLACE_EXISTING
+//                    )
+//                }
+//
 //                smbFile.inputStream.use { inputStream ->
 //                    Files.copy(
 //                        inputStream,
@@ -348,7 +461,9 @@ class Repository(
 //                smbFile.inputStream.close()
 //                smbFile.outputStream.close()
 
-                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
+//                images += Image(i.toLong(), targetFile, fileName, files[i].length().toInt())
+                    images += Image(i.toLong(), targetFile, fileName, files[i].fileSize.toInt())
+                }
             }
         }
         return images
@@ -356,31 +471,44 @@ class Repository(
 
     // Загружаем с сервера строку json по выбранной дате
     suspend fun downloadFileToServer(year: String, month: String, day: String): String {
-//        return withContext(Dispatchers.Default) {
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) ""
 
-        // Создаем объект для аутентификации на шаре
-        val auth = NtlmPasswordAuthentication(
-            "", LoginInformation.USER, LoginInformation.PASS
-        )
-        val path = LoginInformation.PATH
-
+        val authenticationContext =
+            AuthenticationContext(
+                LoginInformation.USER,
+                LoginInformation.PASS.toCharArray(),
+                ""
+            )
         // Ресолвим путь назначения в SmbFile
-        val baseDir = SmbFile(
-            "$path/$year/$month/$day/${LoginInformation.NAME_FILE}",
-            auth
-        )
+        SmbConnection(
+            LoginInformation.SERVERNAME,
+            LoginInformation.SHARENAME,
+//            "Public/ОТК/Проверка настроек/$year/$month/$day/${LoginInformation.NAME_FILE}",
+            authenticationContext
+        ).use { smbConnection ->
+            val path = LoginInformation.PATH
+//            val path = "ОТК/Проверка настроек/"
+            val smbFile =
+                SmbFile(smbConnection, "$path/$year/$month/$day/${LoginInformation.NAME_FILE}")
 
-        val destFileName = SmbFileInputStream(baseDir)
+            var inputStream: InputStream? = null
+            var stringJsonSettings = ""
+            try {
+                inputStream = smbFile.inputStream
 
-        var stringJsonSettings = ""
-        destFileName.bufferedReader().use {
-            stringJsonSettings = it.readText()
-//            Timber.d("str = $stringJsonSettings")
+                inputStream.bufferedReader().use {
+                    stringJsonSettings = it.readText()
+                }
+            } catch (_: IOException) {
+            } finally {
+                try {
+                    inputStream?.close()
+                } catch (ex: IOException) {
+                    println(ex.message)
+                }
+            }
+            return stringJsonSettings
         }
-
-        return stringJsonSettings
-//        }
     }
 
     private fun stringJsonToCustomAdapter(strJson: String): CheckingSettingsCustomAdapter.CustomCheckingSettings? {
@@ -446,217 +574,202 @@ class Repository(
                     context.resources.getString(R.string.assembly_eb) -> {
                         val assemblyEB = assemblyWrapper?.assemblyEB
                         when (workPlace) {
-                            "1.1" -> {
-                                assemblyEB?.wp11?.apply {
+                            "П1-07" -> {
+                                assemblyEB?.wp07?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.2" -> {
-                                assemblyEB?.wp12?.apply {
+
+                            "П1-08" -> {
+                                assemblyEB?.wp08?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.3" -> {
-                                assemblyEB?.wp13?.apply {
+
+                            "П1-09" -> {
+                                assemblyEB?.wp09?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.4" -> {
-                                assemblyEB?.wp14?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.5" -> {
-                                assemblyEB?.wp15?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.6" -> {
-                                assemblyEB?.wp16?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.7" -> {
-                                assemblyEB?.wp17?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.8" -> {
-                                assemblyEB?.wp18?.apply {
+
+                            "П1-10" -> {
+                                assemblyEB?.wp10?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
                         }
                     }
+
                     context.resources.getString(R.string.assembly_bip) -> {
                         val assemblyBIP = assemblyWrapper?.assemblyBIP
                         when (workPlace) {
-                            "1.1" -> {
+                            "П1-11" -> {
                                 assemblyBIP?.wp11?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.2" -> {
+
+                            "П1-12" -> {
                                 assemblyBIP?.wp12?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.3" -> {
+
+                            "П1-13" -> {
                                 assemblyBIP?.wp13?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.4" -> {
+
+                            "П1-14" -> {
                                 assemblyBIP?.wp14?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.5" -> {
+
+                            "П1-15" -> {
                                 assemblyBIP?.wp15?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.6" -> {
+
+                            "П1-16" -> {
                                 assemblyBIP?.wp16?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.7" -> {
-                                assemblyBIP?.wp17?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.8" -> {
-                                assemblyBIP?.wp18?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
                         }
                     }
-                    context.resources.getString(R.string.assembly_speaker) -> {
-                        val assemblySpeaker = assemblyWrapper?.assemblySpeaker
-                        when (workPlace) {
-                            "1.1" -> {
-                                assemblySpeaker?.wp11?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.2" -> {
-                                assemblySpeaker?.wp12?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.3" -> {
-                                assemblySpeaker?.wp13?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.4" -> {
-                                assemblySpeaker?.wp14?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.5" -> {
-                                assemblySpeaker?.wp15?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.6" -> {
-                                assemblySpeaker?.wp16?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.7" -> {
-                                assemblySpeaker?.wp17?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "1.8" -> {
-                                assemblySpeaker?.wp18?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                        }
-                    }
+
                     context.resources.getString(R.string.assembly_temp) -> {
                         val solderingTemperature = assemblyWrapper?.solderingTemperature
                         when (workPlace) {
-                            "1.1" -> {
-                                solderingTemperature?.wp11?.apply {
+                            "П1-01" -> {
+                                solderingTemperature?.wp01?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.2" -> {
-                                solderingTemperature?.wp12?.apply {
+
+                            "П1-02" -> {
+                                solderingTemperature?.wp02?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.3" -> {
-                                solderingTemperature?.wp13?.apply {
+
+                            "П1-03" -> {
+                                solderingTemperature?.wp03?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.4" -> {
-                                solderingTemperature?.wp14?.apply {
+
+                            "П1-04" -> {
+                                solderingTemperature?.wp04?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.5" -> {
-                                solderingTemperature?.wp15?.apply {
+
+                            "П1-05" -> {
+                                solderingTemperature?.wp05?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.6" -> {
-                                solderingTemperature?.wp16?.apply {
+
+                            "П1-19" -> {
+                                solderingTemperature?.wp19?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.7" -> {
-                                solderingTemperature?.wp17?.apply {
+
+                            "П1-20" -> {
+                                solderingTemperature?.wp20?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
-                            "1.8" -> {
-                                solderingTemperature?.wp18?.apply {
+
+                            "П1-21" -> {
+                                solderingTemperature?.wp21?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+
+                            "П1-22" -> {
+                                solderingTemperature?.wp22?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+
+                            "П1-23" -> {
+                                solderingTemperature?.wp23?.apply {
+                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
+                                }
+                            }
+
+                            "П1-24" -> {
+                                solderingTemperature?.wp24?.apply {
                                     list.put(currentDate, ValueAndCalibration(value, isCalibration))
                                 }
                             }
                         }
                     }
-                    context.resources.getString(R.string.assembly_fixation) -> {
-                        val assemblyFixing = assemblyWrapper?.assemblyFixing
-                        when (workPlace) {
-                            "2.3" -> {
-                                assemblyFixing?.wp23?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "2.4" -> {
-                                assemblyFixing?.wp24?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "2.5" -> {
-                                assemblyFixing?.wp25?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "2.6" -> {
-                                assemblyFixing?.wp26?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "2.7" -> {
-                                assemblyFixing?.wp27?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
-                            "2.8" -> {
-                                assemblyFixing?.wp28?.apply {
-                                    list.put(currentDate, ValueAndCalibration(value, isCalibration))
-                                }
-                            }
+                }
+            }
+
+//            Timber.d("$day list = ${list}")
+            return@withContext list
+        }
+    }
+
+    suspend fun downloadStatisticsOutage(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String
+    ): HashMap<Date, Boolean> {
+        return withContext(Dispatchers.IO) {
+            val list = hashMapOf<Date, Boolean>()
+            val adapterAssembly =
+                download(year.toString(), month.toString(), day.toString())?.outageWrapper
+
+            val currentDate = GregorianCalendar(year, month - 1, day).time
+            val listAssembly = hashMapOf<Date, CheckingSettingsCustomAdapter.OutageWrapper?>()
+
+            listAssembly.put(currentDate, adapterAssembly)
+            listAssembly.values.forEach { assemblyWrapper ->
+                when (operation) {
+                    context.resources.getString(R.string.outageText) -> {
+                        val outage = assemblyWrapper?.checkingOutage
+                        outage?.outage?.apply {
+                            list.put(currentDate, this)
                         }
+                    }
+                }
+            }
+
+//            Timber.d("$day list = ${list}")
+            return@withContext list
+        }
+    }
+
+    suspend fun downloadStatisticsExitDevice(
+        year: Int,
+        month: Int,
+        day: Int,
+        operation: String
+    ): HashMap<Date, Utils.MyHash> {
+        return withContext(Dispatchers.IO) {
+            val list = hashMapOf<Date, Utils.MyHash>()
+            val adapterAssembly =
+                download(year.toString(), month.toString(), day.toString())?.exitDeviceWrapper
+
+            val currentDate = GregorianCalendar(year, month - 1, day).time
+            val listAssembly = hashMapOf<Date, CheckingSettingsCustomAdapter.ExitDeviceWrapper?>()
+
+            listAssembly.put(currentDate, adapterAssembly)
+            listAssembly.values.forEach { assemblyWrapper ->
+                when (operation) {
+                    context.resources.getString(R.string.exitDevice) -> {
+                        val outage = assemblyWrapper?.exitDevice
+                        list.put(currentDate, Utils.MyHash(outage?.exitDevice, outage?.noteExitDevice))
                     }
                 }
             }
@@ -685,15 +798,28 @@ class Repository(
         return withContext(Dispatchers.Default) {
             val path = Utils.createFolderOnServer(date)
             // Создаем объект аутентификатор
-            val auth =
-                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
-            // Ищем файл
-            val file = SmbFile(
-                path + File.separator + name, auth,
-                SmbFile.FILE_SHARE_READ or SmbFile.FILE_SHARE_WRITE or SmbFile.FILE_SHARE_DELETE
-            )
-            Timber.d("delete file = ${path + File.separator + name}")
-            file.delete()
+            val authenticationContext =
+                AuthenticationContext(
+                    LoginInformation.USER,
+                    LoginInformation.PASS.toCharArray(),
+                    ""
+                )
+            val str = "\""
+            // Ресолвим путь назначения в SmbFile
+            SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+//                "Public/ОТК/Проверка настроек/$year/$month/$day/${LoginInformation.NAME_FILE}",
+                authenticationContext
+            ).use { smbConnection ->
+                // Ищем файл
+                val file = SmbFile(
+                    smbConnection,
+                    path + File.separator + name
+                )
+                Timber.d("delete file = ${path + File.separator + name}")
+                file.deleteFile()
+            }
             true
         }
     }
@@ -702,15 +828,45 @@ class Repository(
     suspend fun isExistFile(year: String, month: String, day: String): Boolean {
         return withContext(Dispatchers.Default) {
             // Создаем объект аутентификатор
-            val auth =
-                NtlmPasswordAuthentication("", LoginInformation.USER, LoginInformation.PASS)
-
+            val authenticationContext =
+                AuthenticationContext(
+                    LoginInformation.USER,
+                    LoginInformation.PASS.toCharArray(),
+                    ""
+                )
+            val str = "\""
             // Ресолвим путь назначения в SmbFile
-            val baseDir = SmbFile(
-                "${LoginInformation.PATH}/$year/$month/$day/${LoginInformation.NAME_FILE}",
-                auth
-            )
-            baseDir.exists()
+            SmbConnection(
+                LoginInformation.SERVERNAME,
+                LoginInformation.SHARENAME,
+//                "Public/ОТК/Проверка настроек/$year/$month/$day/${LoginInformation.NAME_FILE}",
+                authenticationContext
+            ).use { smbConnection ->
+                val smbDirectoryYear =
+                    SmbDirectory(smbConnection, LoginInformation.PATH + "/$year")
+                if (!smbDirectoryYear.isDirectory)
+                    smbDirectoryYear.createDirectory()
+
+                val smbDirectoryMonth =
+                    SmbDirectory(smbConnection, LoginInformation.PATH + "/$year/$month")
+                if (!smbDirectoryMonth.isDirectory)
+                    smbDirectoryMonth.createDirectory()
+
+                val smbDirectoryDay =
+                    SmbDirectory(smbConnection, LoginInformation.PATH + "/$year/$month/$day")
+                if (!smbDirectoryDay.isDirectory)
+                    smbDirectoryDay.createDirectory()
+
+//                smbDirectory.ensureExists();
+
+                val smbFile = SmbFile(
+                    smbConnection,
+                    LoginInformation.PATH + "/$year/$month/$day/${LoginInformation.NAME_FILE}"
+                )
+                if (!smbFile.isExisting)
+                    smbFile.createFile()
+                return@withContext true
+            }
         }
     }
 }

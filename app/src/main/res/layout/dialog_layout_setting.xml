@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/serverName"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/serverName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editServerName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editServerName"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        android:hint="@string/dialog_setting_server_tint"
+        android:text="10.50.3.3"
+        app:layout_constraintStart_toEndOf="@+id/serverName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shareName"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/shareName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editShareName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editShareName"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        android:hint="@string/dialog_setting_share_tint"
+        android:text="Public"
+        app:layout_constraintStart_toEndOf="@+id/shareName"
+        app:layout_constraintTop_toBottomOf="@+id/editServerName" />
+
+    <TextView
+        android:id="@+id/pathToFolder"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/shareName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editPathToFolder"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editPathToFolder"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        android:hint="@string/dialog_setting_path_tint"
+        android:text="ОТК/Проверка настроек"
+        app:layout_constraintStart_toEndOf="@+id/pathToFolder"
+        app:layout_constraintTop_toBottomOf="@+id/editShareName" />
+
+    <TextView
+        android:id="@+id/dialogSettingUser"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_setting_user"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editDialogSettingUser"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editDialogSettingUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/dialog_setting_user_tint"
+        android:text="OTK_rw"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dialogSettingUser"
+        app:layout_constraintTop_toBottomOf="@+id/editPathToFolder" />
+
+    <TextView
+        android:id="@+id/dialogSettingPassword"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_setting_password"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editDialogSettingPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialogSettingUser" />
+
+    <EditText
+        android:id="@+id/editDialogSettingPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/dialog_setting_password_tint"
+        android:inputType="textPassword"
+        android:text="ZYZbnrGvOOxuQMJxR1B1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dialogSettingPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editDialogSettingUser" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
